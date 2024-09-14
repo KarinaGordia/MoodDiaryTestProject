@@ -1,8 +1,8 @@
 import 'package:mood_diary/entity/feeling.dart';
 import 'package:mood_diary/resources/resources.dart';
 
-class Feelings {
-  Feelings._();
+class AppLists {
+  AppLists._();
 
   static final feelings = <Feeling>[
     Feeling(name: 'Радость', imagePath: FeelingImages.joy, subFeelings: [
