@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mood_diary/widgets/mood_diary_screen/mood_diary_widget_model.dart';
-import 'package:mood_diary/widgets/mood_diary_screen/slider_widget/custom_thumb.dart';
-import 'package:mood_diary/widgets/mood_diary_screen/slider_widget/custom_track.dart';
+import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget_model.dart';
+import 'package:mood_diary/ui/widgets/mood_diary_screen/slider_widget/custom_thumb.dart';
+import 'package:mood_diary/ui/widgets/mood_diary_screen/slider_widget/custom_track.dart';
 
 class EmotionSlider extends StatefulWidget {
   const EmotionSlider({

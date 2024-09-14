@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mood_diary/entity/feeling.dart';
-import 'package:mood_diary/widgets/mood_diary_screen/mood_diary_widget_model.dart';
-import 'package:mood_diary/widgets/mood_diary_screen/slider_widget/slider_widget.dart';
+import 'package:mood_diary/domain/entity/feeling.dart';
+import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget_model.dart';
+import 'package:mood_diary/ui/widgets/mood_diary_screen/slider_widget/slider_widget.dart';
 
 class MoodDiaryWidget extends StatelessWidget {
   const MoodDiaryWidget({super.key});

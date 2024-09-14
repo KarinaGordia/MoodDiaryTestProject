@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mood_diary/app_icons.dart';
-import 'package:mood_diary/widgets/emotion_screen/emotion_screen_widget_model.dart';
-import 'package:mood_diary/widgets/mood_diary_screen/mood_diary_widget.dart';
-import 'package:mood_diary/widgets/mood_diary_screen/mood_diary_widget_model.dart';
+import 'package:mood_diary/ui/widgets/emotion_screen/emotion_screen_widget_model.dart';
+import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget.dart';
+import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget_model.dart';
 
 class EmotionScreenWidget extends StatefulWidget {
   const EmotionScreenWidget({super.key});

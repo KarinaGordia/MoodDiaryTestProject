@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mood_diary/app_lists/feelings.dart';
-import 'package:mood_diary/entity/feeling.dart';
+import 'package:mood_diary/domain/app_lists/feelings.dart';
+import 'package:mood_diary/domain/entity/feeling.dart';
+
 
 class MoodDiaryWidgetModel extends ChangeNotifier {
   MoodDiaryWidgetModel() {

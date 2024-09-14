@@ -1,4 +1,4 @@
-import 'package:mood_diary/entity/feeling.dart';
+import 'package:mood_diary/domain/entity/feeling.dart';
 import 'package:mood_diary/resources/resources.dart';
 
 class AppLists {
