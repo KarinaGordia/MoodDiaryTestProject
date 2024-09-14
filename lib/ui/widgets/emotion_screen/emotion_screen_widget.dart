@@ -124,10 +124,13 @@ class TimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = TimeWidgetModelProvider.watch(context)?.model;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.only(top:15, bottom: 10, left:20, right:20,),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(
+            width: 24,
+          ),
           Expanded(
             child: Text(
               '${model?.day} ${model?.russianMonth[model.monthIndex]} ${model?.time}',
@@ -136,10 +139,15 @@ class TimeWidget extends StatelessWidget {
             ),
           ),
           IconButton(
+            padding: EdgeInsets.zero,
+            iconSize: 24,
+            style: ButtonStyle(
+              padding: WidgetStatePropertyAll(EdgeInsets.zero),
+              fixedSize: WidgetStateProperty.all(Size(24, 24)),
+            ),
             onPressed: () {},
             icon: const Icon(
               Icons.calendar_month,
-              size: 24,
               color: Color.fromRGBO(188, 188, 191, 1),
             ),
           ),
