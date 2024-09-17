@@ -28,10 +28,10 @@ class TimeWidget extends StatelessWidget {
             padding: EdgeInsets.zero,
             iconSize: 24,
             style: ButtonStyle(
-              padding: WidgetStatePropertyAll(EdgeInsets.zero),
-              fixedSize: WidgetStateProperty.all(Size(24, 24)),
+              padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+              fixedSize: WidgetStateProperty.all(const Size(24, 24)),
             ),
-            onPressed: () {},
+            onPressed: () => model?.showCalendar(context),
             icon: const Icon(
               Icons.calendar_month,
               color: Color.fromRGBO(188, 188, 191, 1),

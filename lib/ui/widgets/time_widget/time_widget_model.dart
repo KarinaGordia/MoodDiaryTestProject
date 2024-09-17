@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mood_diary/ui/widgets/calendar_screen/calendar_screen_widget.dart';
 
 class TimeWidgetModel extends ChangeNotifier {
   var day = DateTime.now().day;
@@ -26,6 +27,14 @@ class TimeWidgetModel extends ChangeNotifier {
     monthIndex = DateTime.now().month;
     time = DateFormat.Hm().format(DateTime.now());
     notifyListeners();
+  }
+
+  void showCalendar(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const CalendarScreenWidget(),
+      ),
+    );
   }
 }
 
