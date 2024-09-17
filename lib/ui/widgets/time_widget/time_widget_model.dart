@@ -32,7 +32,7 @@ class TimeWidgetModel extends ChangeNotifier {
   void showCalendar(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const CalendarScreenWidget(),
+        builder: (context) => CalendarScreenWidget(),
       ),
     );
   }

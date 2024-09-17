@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CalendarScreenWidgetModel {
-
+  final russianDaysOfWeek = <String>['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
 }
 
 class CalendarScreenWidgetModelProvider extends InheritedWidget {
