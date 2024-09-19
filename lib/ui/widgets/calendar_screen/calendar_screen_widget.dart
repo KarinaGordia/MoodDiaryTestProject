@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/calendar_screen_widget_model.dart';
+import 'package:mood_diary/ui/widgets/time_widget/calendar_draft.dart';
 
 class CalendarScreenWidget extends StatelessWidget {
   CalendarScreenWidget({super.key});
@@ -11,7 +13,7 @@ class CalendarScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CalendarScreenWidgetModelProvider(
       model: _model,
-      child: const CalendarScreenWidgetBody(),
+      child: CalendarScreenWidgetBody(),
     );
   }
 }
@@ -23,43 +25,57 @@ class CalendarScreenWidgetBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 52,
-        leading: IconButton(
-          style: const ButtonStyle(
-            iconColor: WidgetStatePropertyAll(Color.fromRGBO(188, 188, 191, 1)),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop(context);
-          },
-          icon: const Icon(Icons.close_rounded),
+    return const Scaffold(
+      appBar: CalendarScreenAppBarWidget(),
+      body: CalendarWidget(),
+    );
+  }
+}
+
+class CalendarScreenAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+  const CalendarScreenAppBarWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 52,
+      leading: IconButton(
+        style: const ButtonStyle(
+          iconColor: WidgetStatePropertyAll(Color.fromRGBO(188, 188, 191, 1)),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: TextButton(
-              style: const ButtonStyle(
-                padding: WidgetStatePropertyAll(
-                    EdgeInsets.symmetric(horizontal: 10)),
-              ),
-              onPressed: () {},
-              child: Text(
-                'Сегодня',
-                style: TextStyle(
-                  fontFamily: GoogleFonts.nunito().fontFamily,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: const Color.fromRGBO(188, 188, 191, 1),
-                ),
+        onPressed: () {
+          Navigator.of(context).pop(context);
+        },
+        icon: const Icon(Icons.close_rounded),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: TextButton(
+            style: const ButtonStyle(
+              padding: WidgetStatePropertyAll(
+                  EdgeInsets.symmetric(horizontal: 10)),
+            ),
+            onPressed: () {},
+            child: Text(
+              'Сегодня',
+              style: TextStyle(
+                fontFamily: GoogleFonts.nunito().fontFamily,
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                color: const Color.fromRGBO(188, 188, 191, 1),
               ),
             ),
           ),
-        ],
-      ),
-      body: const CalendarWidget(),
+        ),
+      ],
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class CalendarWidget extends StatelessWidget {
@@ -99,21 +115,19 @@ class CalendarWidget extends StatelessWidget {
 }
 
 class ScrollCalendarWidget extends StatelessWidget {
-  const ScrollCalendarWidget({super.key});
-
+  ScrollCalendarWidget({super.key});
+  final DateTime _today = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 6),
-        child: Column(
-          children: List.generate(12, (index) {
-            return CalendarMonthWidget(
-              year: '2024',
-              month: 'Январь',
-            );
-          }),
-        ),
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          var month = DateTime(_today.year, index + 1, 1);
+          return CalendarMonthWidget(
+            year: DateFormat('yyyy').format(month),
+            month: DateFormat('MMMM').format(month),
+          );
+        },
       ),
     );
   }
