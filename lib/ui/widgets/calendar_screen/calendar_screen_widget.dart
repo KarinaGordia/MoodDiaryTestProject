@@ -13,7 +13,7 @@ class CalendarScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CalendarScreenWidgetModelProvider(
       model: _model,
-      child: CalendarScreenWidgetBody(),
+      child: const CalendarScreenWidgetBody(),
     );
   }
 }
@@ -93,39 +93,56 @@ class CalendarWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(model!.russianDaysOfWeek.length, (index) {
-                return Text(
-                  model.russianDaysOfWeek[index],
-                  style: TextStyle(
-                    fontFamily: GoogleFonts.nunito().fontFamily,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    color: const Color.fromRGBO(188, 188, 191, 1),
+                return Expanded(
+                  child: Text(
+                    model.russianDaysOfWeek[index],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.nunito().fontFamily,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: const Color.fromRGBO(188, 188, 191, 1),
+                    ),
                   ),
                 );
               }),
             ),
           ),
-          ScrollCalendarWidget(),
+          const ScrollCalendarWidget(),
         ],
       ),
     );
   }
 }
 
-class ScrollCalendarWidget extends StatelessWidget {
-  ScrollCalendarWidget({super.key});
+class ScrollCalendarWidget extends StatefulWidget {
+  const ScrollCalendarWidget({super.key});
+
+  @override
+  State<ScrollCalendarWidget> createState() => _ScrollCalendarWidgetState();
+}
+
+class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
   final DateTime _today = DateTime.now();
+
+  final ScrollController scrollController = ScrollController(
+    // initialScrollOffset: 50,
+    // keepScrollOffset: true,
+  );
+
+  //вычислить индекс начального виджета на основе текущего месяца
+  //высоту смогу найти только после построения яйчеек
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        controller: scrollController,
         itemBuilder: (BuildContext context, int index) {
-          var month = DateTime(_today.year, index + 1, 1);
+          var monthDate = DateTime(_today.year, index + 1, 1);
           return CalendarMonthWidget(
-            year: DateFormat('yyyy').format(month),
-            month: DateFormat('MMMM').format(month),
+            monthDate: monthDate,
           );
         },
       ),
@@ -133,22 +150,24 @@ class ScrollCalendarWidget extends StatelessWidget {
   }
 }
 
+//пример календаря
+//https://blog.jobins.jp/custom-calendar-in-flutter-application
 class CalendarMonthWidget extends StatelessWidget {
   const CalendarMonthWidget(
-      {super.key, required this.year, required this.month});
+      {super.key,  required this.monthDate});
 
-  final String year;
-  final String month;
+  final DateTime monthDate;
 
   @override
   Widget build(BuildContext context) {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            year,
+            DateFormat('yyyy').format(monthDate),
             style: TextStyle(
               fontFamily: GoogleFonts.nunito().fontFamily,
               fontWeight: FontWeight.w700,
@@ -157,7 +176,7 @@ class CalendarMonthWidget extends StatelessWidget {
             ),
           ),
           Text(
-            month,
+            DateFormat('MMMM').format(monthDate),
             style: TextStyle(
               fontFamily: GoogleFonts.nunito().fontFamily,
               fontWeight: FontWeight.w700,
@@ -166,12 +185,48 @@ class CalendarMonthWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-            height: 205,
-            color: Colors.grey,
+          CellBuilderWidget(
+            cells: model!.generateMonthCells(monthDate),
+            month: monthDate,
           ),
         ],
       ),
     );
+  }
+}
+
+class CellBuilderWidget extends StatelessWidget {
+  const CellBuilderWidget({super.key, required this.cells, required this.month});
+  final List<DateTime> cells;
+  final DateTime month;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 7,
+          mainAxisSpacing: 0,
+          crossAxisSpacing: 8,
+        ),
+        itemCount: cells.length,
+        itemBuilder: (context, index) {
+          var item = cells[index];
+          var isSameMonth = item.month == month.month;
+          return Opacity(
+            opacity: isSameMonth ? 1 : 0,
+            child: Center(
+              child: Text(
+                item.day.toString(),
+                style: TextStyle(
+                  fontFamily: GoogleFonts.nunito().fontFamily,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: const Color.fromRGBO(76, 76, 105, 1),),
+              ),
+            ),
+          );
+        });
   }
 }
