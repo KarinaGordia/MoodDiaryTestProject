@@ -32,7 +32,8 @@ class CalendarScreenWidgetBody extends StatelessWidget {
   }
 }
 
-class CalendarScreenAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+class CalendarScreenAppBarWidget extends StatelessWidget
+    implements PreferredSizeWidget {
   const CalendarScreenAppBarWidget({
     super.key,
   });
@@ -55,8 +56,8 @@ class CalendarScreenAppBarWidget extends StatelessWidget implements PreferredSiz
           padding: const EdgeInsets.only(right: 10.0),
           child: TextButton(
             style: const ButtonStyle(
-              padding: WidgetStatePropertyAll(
-                  EdgeInsets.symmetric(horizontal: 10)),
+              padding:
+                  WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
             ),
             onPressed: () {},
             child: Text(
@@ -128,9 +129,9 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
   final DateTime _today = DateTime.now();
 
   final ScrollController scrollController = ScrollController(
-    // initialScrollOffset: 50,
-    // keepScrollOffset: true,
-  );
+      // initialScrollOffset: 50,
+      // keepScrollOffset: true,
+      );
 
   //вычислить индекс начального виджета на основе текущего месяца
   //высоту смогу найти только после построения яйчеек
@@ -153,8 +154,7 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
 //пример календаря
 //https://blog.jobins.jp/custom-calendar-in-flutter-application
 class CalendarMonthWidget extends StatelessWidget {
-  const CalendarMonthWidget(
-      {super.key,  required this.monthDate});
+  const CalendarMonthWidget({super.key, required this.monthDate});
 
   final DateTime monthDate;
 
@@ -187,7 +187,7 @@ class CalendarMonthWidget extends StatelessWidget {
           const SizedBox(height: 10),
           CellBuilderWidget(
             cells: model!.generateMonthCells(monthDate),
-            month: monthDate,
+            monthDate: monthDate,
           ),
         ],
       ),
@@ -196,9 +196,26 @@ class CalendarMonthWidget extends StatelessWidget {
 }
 
 class CellBuilderWidget extends StatelessWidget {
-  const CellBuilderWidget({super.key, required this.cells, required this.month});
+  const CellBuilderWidget(
+      {super.key, required this.cells, required this.monthDate});
+
   final List<DateTime> cells;
-  final DateTime month;
+  final DateTime monthDate;
+
+  Widget? _setTodayMark() {
+    return Positioned(
+      top: 38,
+      left: 21,
+      child: Container(
+        width: 5,
+        height: 5,
+        decoration: BoxDecoration(
+          color: Colors.orange,
+          shape: BoxShape.circle,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -213,18 +230,40 @@ class CellBuilderWidget extends StatelessWidget {
         itemCount: cells.length,
         itemBuilder: (context, index) {
           var item = cells[index];
-          var isSameMonth = item.month == month.month;
+          var today = DateTime.now();
+          var isToday = item.day == today.day &&
+              item.month == today.month &&
+              item.year == today.year;
+          var isSameMonth = item.month == monthDate.month;
           return Opacity(
             opacity: isSameMonth ? 1 : 0,
-            child: Center(
-              child: Text(
-                item.day.toString(),
-                style: TextStyle(
-                  fontFamily: GoogleFonts.nunito().fontFamily,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: const Color.fromRGBO(76, 76, 105, 1),),
-              ),
+            child: Stack(
+              children: <Widget>[
+                if (isToday)
+                  Positioned(
+                    top: 38,
+                    left: 21,
+                    child: Container(
+                      width: 5,
+                      height: 5,
+                      decoration: const BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                Center(
+                  child: Text(
+                    item.day.toString(),
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.nunito().fontFamily,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: const Color.fromRGBO(76, 76, 105, 1),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         });
