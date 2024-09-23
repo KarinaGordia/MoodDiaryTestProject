@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/calendar_screen_widget_model.dart';
-import 'package:mood_diary/ui/widgets/time_widget/calendar_draft.dart';
 
 class CalendarScreenWidget extends StatelessWidget {
   CalendarScreenWidget({super.key});
@@ -187,7 +186,7 @@ class CalendarMonthWidget extends StatelessWidget {
           const SizedBox(height: 10),
           CellBuilderWidget(
             cells: model!.generateMonthCells(monthDate),
-            monthDate: monthDate,
+            month: monthDate.month,
           ),
         ],
       ),
@@ -197,25 +196,10 @@ class CalendarMonthWidget extends StatelessWidget {
 
 class CellBuilderWidget extends StatelessWidget {
   const CellBuilderWidget(
-      {super.key, required this.cells, required this.monthDate});
+      {super.key, required this.cells, required this.month});
 
   final List<DateTime> cells;
-  final DateTime monthDate;
-
-  Widget? _setTodayMark() {
-    return Positioned(
-      top: 38,
-      left: 21,
-      child: Container(
-        width: 5,
-        height: 5,
-        decoration: BoxDecoration(
-          color: Colors.orange,
-          shape: BoxShape.circle,
-        ),
-      ),
-    );
-  }
+  final int month;
 
   @override
   Widget build(BuildContext context) {
@@ -234,38 +218,76 @@ class CellBuilderWidget extends StatelessWidget {
           var isToday = item.day == today.day &&
               item.month == today.month &&
               item.year == today.year;
-          var isSameMonth = item.month == monthDate.month;
-          return Opacity(
-            opacity: isSameMonth ? 1 : 0,
-            child: Stack(
-              children: <Widget>[
-                if (isToday)
-                  Positioned(
-                    top: 38,
-                    left: 21,
-                    child: Container(
-                      width: 5,
-                      height: 5,
-                      decoration: const BoxDecoration(
-                        color: Colors.orange,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                Center(
-                  child: Text(
-                    item.day.toString(),
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.nunito().fontFamily,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: const Color.fromRGBO(76, 76, 105, 1),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          var isSameMonth = item.month == month;
+          return CellWidget(
+            index: index,
+            isToday: isToday,
+            isSameMonth: isSameMonth,
+            date: item,
           );
         });
+  }
+}
+
+class CellWidget extends StatelessWidget {
+  const CellWidget(
+      {super.key,
+      required this.index,
+      required this.isToday,
+      required this.isSameMonth,
+      required this.date});
+
+  final int index;
+  final bool isToday;
+  final bool isSameMonth;
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
+    return GestureDetector(
+      onTap: () {
+        model.selectDay(date);
+      },
+      child: Opacity(
+        opacity: isSameMonth ? 1 : 0,
+        child: Stack(
+          children: <Widget>[
+            if (isToday)
+              Positioned(
+                top: 35,
+                left: 21,
+                child: Container(
+                  width: 5,
+                  height: 5,
+                  decoration: const BoxDecoration(
+                    color: Colors.orange,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            Center(
+              child: Text(
+                date.day.toString(),
+                style: TextStyle(
+                  fontFamily: GoogleFonts.nunito().fontFamily,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: const Color.fromRGBO(76, 76, 105, 1),
+                ),
+              ),
+            ),
+            if (model!.selectedDate?.compareTo(date) == 0)
+              Container(
+                margin: const EdgeInsets.all(1.5),
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(255, 135, 2, 0.25),
+                  shape: BoxShape.circle,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

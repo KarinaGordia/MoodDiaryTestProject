@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-class CalendarScreenWidgetModel {
+class CalendarScreenWidgetModel extends ChangeNotifier{
   final russianDaysOfWeek = <String>['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
+  DateTime? selectedDate;
 
   List<DateTime> generateMonthCells(DateTime monthDate) {
     var cells = <DateTime>[];
@@ -27,15 +27,20 @@ class CalendarScreenWidgetModel {
     cells.addAll(currentMonthCells);
     return cells;
   }
+
+  void selectDay(DateTime date) {
+    selectedDate = date;
+    notifyListeners();
+  }
 }
 
-class CalendarScreenWidgetModelProvider extends InheritedWidget {
+class CalendarScreenWidgetModelProvider extends InheritedNotifier {
   final CalendarScreenWidgetModel model;
   const CalendarScreenWidgetModelProvider ({
     super.key,
     required this.model,
     required super.child,
-  });
+  }) : super(notifier: model);
 
   static CalendarScreenWidgetModelProvider? watch(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<CalendarScreenWidgetModelProvider>();
