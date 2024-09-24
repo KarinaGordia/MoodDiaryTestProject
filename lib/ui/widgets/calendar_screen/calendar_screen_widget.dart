@@ -214,6 +214,9 @@ class CellBuilderWidget extends StatelessWidget {
               item.month == today.month &&
               item.year == today.year;
           var isSameMonth = item.month == month;
+          if(!isSameMonth) {
+            return Container();
+          }
           return CellWidget(
             index: index,
             isToday: isToday,
@@ -242,48 +245,43 @@ class CellWidget extends StatelessWidget {
     final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
     return GestureDetector(
       onTap: () {
-        if (isSameMonth) {
-          model.selectDay(date);
-        }
+        model.selectDay(date);
       },
-      child: Opacity(
-        opacity: isSameMonth ? 1 : 0,
-        child: Stack(
-          children: <Widget>[
-            if (isToday)
-              Positioned(
-                top: 35,
-                left: 21,
-                child: Container(
-                  width: 5,
-                  height: 5,
-                  decoration: const BoxDecoration(
-                    color: Colors.orange,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            Center(
-              child: Text(
-                date.day.toString(),
-                style: TextStyle(
-                  fontFamily: GoogleFonts.nunito().fontFamily,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: const Color.fromRGBO(76, 76, 105, 1),
-                ),
-              ),
-            ),
-            if (model!.selectedDate?.compareTo(date) == 0)
-              Container(
-                margin: const EdgeInsets.all(1.5),
+      child: Stack(
+        children: <Widget>[
+          if (isToday)
+            Positioned(
+              top: 35,
+              left: 21,
+              child: Container(
+                width: 5,
+                height: 5,
                 decoration: const BoxDecoration(
-                  color: Color.fromRGBO(255, 135, 2, 0.25),
+                  color: Colors.orange,
                   shape: BoxShape.circle,
                 ),
               ),
-          ],
-        ),
+            ),
+          Center(
+            child: Text(
+              date.day.toString(),
+              style: TextStyle(
+                fontFamily: GoogleFonts.nunito().fontFamily,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromRGBO(76, 76, 105, 1),
+              ),
+            ),
+          ),
+          if (model!.selectedDate?.compareTo(date) == 0)
+            Container(
+              margin: const EdgeInsets.all(1.5),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(255, 135, 2, 0.25),
+                shape: BoxShape.circle,
+              ),
+            ),
+        ],
       ),
     );
   }

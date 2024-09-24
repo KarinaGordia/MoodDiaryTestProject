@@ -15,8 +15,9 @@ final appTheme = ThemeData(
   //colorScheme: ColorScheme.fromSeed(seedColor: mandarin),
   primaryColor: mandarin,
   scaffoldBackgroundColor: backgroundLight,
-  appBarTheme: const AppBarTheme(
+  appBarTheme: AppBarTheme(
     backgroundColor: backgroundLight,
+    surfaceTintColor: backgroundLight,
   ),
   tabBarTheme: TabBarTheme(
     indicatorSize: TabBarIndicatorSize.tab,

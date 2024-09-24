@@ -13,6 +13,7 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   }
 
   static const startingYear = 2023;
+  static const monthsInYear = 12;
   static const averageMonthWidgetHeight = 320;
   static const russianDaysOfWeek = <String>[
     'ПН',
@@ -49,12 +50,17 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
 
   int getInitialScrollOffset() {
     int yearsBetween = _today.year - startingYear;
-    int monthsCount = yearsBetween * 12 + _today.month - 1;
+    int monthsCount = yearsBetween * monthsInYear + _today.month - 1;
     return monthsCount * averageMonthWidgetHeight;
   }
 
   void selectDay(DateTime date) {
-    selectedDate = date;
+    if(date == selectedDate) {
+      selectedDate = null;
+    } else {
+      selectedDate = date;
+    }
+
     notifyListeners();
   }
 }
