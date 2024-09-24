@@ -126,12 +126,27 @@ class ScrollCalendarWidget extends StatefulWidget {
 
 class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
   final DateTime _today = DateTime.now();
+  late double initialScrollOffset;
+  late final ScrollController scrollController;
 
-  final ScrollController scrollController = ScrollController(
-      // initialScrollOffset: 50,
-      // keepScrollOffset: true,
-      );
+  @override
+  void initState() {
+    super.initState();
+    initialScrollOffset = getInitialScrollOffset();
+    scrollController = ScrollController(
+      initialScrollOffset: initialScrollOffset,
+      keepScrollOffset: true,
+    );
+  }
 
+  double getInitialScrollOffset() {
+    int yearsBetween = _today.year - 2023;
+    int monthsCount = yearsBetween * 12 +_today.month-1;
+    return monthsCount * 320;
+  }
+
+  //5 месяцев в двух годах по 6 недель, остальные по 5
+  //1 раз в 7 лет (с 2021) в феврале 4 недели
   //вычислить индекс начального виджета на основе текущего месяца
   //высоту смогу найти только после построения яйчеек
   @override
@@ -140,7 +155,7 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
       child: ListView.builder(
         controller: scrollController,
         itemBuilder: (BuildContext context, int index) {
-          var monthDate = DateTime(_today.year, index + 1, 1);
+          var monthDate = DateTime(2023, index + 1, 1);
           return CalendarMonthWidget(
             monthDate: monthDate,
           );
@@ -247,7 +262,9 @@ class CellWidget extends StatelessWidget {
     final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
     return GestureDetector(
       onTap: () {
-        model.selectDay(date);
+        if(isSameMonth) {
+          model.selectDay(date);
+        }
       },
       child: Opacity(
         opacity: isSameMonth ? 1 : 0,
