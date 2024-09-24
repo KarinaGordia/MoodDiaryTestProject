@@ -22,6 +22,7 @@ class CalendarScreenWidgetBody extends StatelessWidget {
     super.key,
   });
 
+  // @override
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -39,6 +40,8 @@ class CalendarScreenAppBarWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+    final scrollController = model?.scrollController;
     return AppBar(
       toolbarHeight: 52,
       leading: IconButton(
@@ -58,7 +61,11 @@ class CalendarScreenAppBarWidget extends StatelessWidget
               padding:
                   WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
             ),
-            onPressed: () {},
+            onPressed: () {
+              scrollController?.animateTo(scrollController.initialScrollOffset,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.linear);
+            },
             child: Text(
               'Сегодня',
               style: TextStyle(
@@ -83,7 +90,6 @@ class CalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -94,10 +100,11 @@ class CalendarWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(model!.russianDaysOfWeek.length, (index) {
+              children: List.generate(
+                  CalendarScreenWidgetModel.russianDaysOfWeek.length, (index) {
                 return Expanded(
                   child: Text(
-                    model.russianDaysOfWeek[index],
+                    CalendarScreenWidgetModel.russianDaysOfWeek[index],
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: GoogleFonts.nunito().fontFamily,
@@ -117,45 +124,18 @@ class CalendarWidget extends StatelessWidget {
   }
 }
 
-class ScrollCalendarWidget extends StatefulWidget {
+class ScrollCalendarWidget extends StatelessWidget {
   const ScrollCalendarWidget({super.key});
 
   @override
-  State<ScrollCalendarWidget> createState() => _ScrollCalendarWidgetState();
-}
-
-class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
-  final DateTime _today = DateTime.now();
-  late double initialScrollOffset;
-  late final ScrollController scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    initialScrollOffset = getInitialScrollOffset();
-    scrollController = ScrollController(
-      initialScrollOffset: initialScrollOffset,
-      keepScrollOffset: true,
-    );
-  }
-
-  double getInitialScrollOffset() {
-    int yearsBetween = _today.year - 2023;
-    int monthsCount = yearsBetween * 12 +_today.month-1;
-    return monthsCount * 320;
-  }
-
-  //5 месяцев в двух годах по 6 недель, остальные по 5
-  //1 раз в 7 лет (с 2021) в феврале 4 недели
-  //вычислить индекс начального виджета на основе текущего месяца
-  //высоту смогу найти только после построения яйчеек
-  @override
   Widget build(BuildContext context) {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
     return Expanded(
       child: ListView.builder(
-        controller: scrollController,
+        controller: model?.scrollController,
         itemBuilder: (BuildContext context, int index) {
-          var monthDate = DateTime(2023, index + 1, 1);
+          var monthDate =
+              DateTime(CalendarScreenWidgetModel.startingYear, index + 1, 1);
           return CalendarMonthWidget(
             monthDate: monthDate,
           );
@@ -262,7 +242,7 @@ class CellWidget extends StatelessWidget {
     final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
     return GestureDetector(
       onTap: () {
-        if(isSameMonth) {
+        if (isSameMonth) {
           model.selectDay(date);
         }
       },
