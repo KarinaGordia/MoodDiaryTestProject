@@ -42,3 +42,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 lib/main.dart
+lib/ui/widgets/time_widget/calendar_draft.dart

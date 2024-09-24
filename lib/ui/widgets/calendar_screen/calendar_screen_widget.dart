@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mood_diary/app_icons.dart';
+import 'package:mood_diary/ui/theme/theme.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/calendar_screen_widget_model.dart';
 
 class CalendarScreenWidget extends StatelessWidget {
@@ -46,12 +48,12 @@ class CalendarScreenAppBarWidget extends StatelessWidget
       toolbarHeight: 52,
       leading: IconButton(
         style: const ButtonStyle(
-          iconColor: WidgetStatePropertyAll(Color.fromRGBO(188, 188, 191, 1)),
+          iconColor: WidgetStatePropertyAll(AppColors.grey2),
         ),
         onPressed: () {
           Navigator.of(context).pop(context);
         },
-        icon: const Icon(Icons.close_rounded),
+        icon: const Icon(AppIcons.union, size: 18,),
       ),
       actions: [
         Padding(
@@ -73,7 +75,7 @@ class CalendarScreenAppBarWidget extends StatelessWidget
                 fontFamily: GoogleFonts.nunito().fontFamily,
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
-                color: const Color.fromRGBO(188, 188, 191, 1),
+                color: AppColors.grey2,
               ),
             ),
           ),
@@ -111,7 +113,7 @@ class CalendarWidget extends StatelessWidget {
                       fontFamily: GoogleFonts.nunito().fontFamily,
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
-                      color: const Color.fromRGBO(188, 188, 191, 1),
+                      color: AppColors.grey2,
                     ),
                   ),
                 );
@@ -146,8 +148,6 @@ class ScrollCalendarWidget extends StatelessWidget {
   }
 }
 
-//пример календаря
-//https://blog.jobins.jp/custom-calendar-in-flutter-application
 class CalendarMonthWidget extends StatelessWidget {
   const CalendarMonthWidget({super.key, required this.monthDate});
 
@@ -167,7 +167,7 @@ class CalendarMonthWidget extends StatelessWidget {
               fontFamily: GoogleFonts.nunito().fontFamily,
               fontWeight: FontWeight.w700,
               fontSize: 16,
-              color: const Color.fromRGBO(188, 188, 191, 1),
+              color: AppColors.grey2,
             ),
           ),
           Text(
@@ -176,7 +176,7 @@ class CalendarMonthWidget extends StatelessWidget {
               fontFamily: GoogleFonts.nunito().fontFamily,
               fontWeight: FontWeight.w700,
               fontSize: 24,
-              color: const Color.fromRGBO(76, 76, 105, 1),
+              color: AppColors.black,
             ),
           ),
           const SizedBox(height: 10),
@@ -245,7 +245,7 @@ class CellWidget extends StatelessWidget {
                 width: 5,
                 height: 5,
                 decoration: const BoxDecoration(
-                  color: Colors.orange,
+                  color: AppColors.mandarin,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -257,7 +257,7 @@ class CellWidget extends StatelessWidget {
                 fontFamily: GoogleFonts.nunito().fontFamily,
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: const Color.fromRGBO(76, 76, 105, 1),
+                color: AppColors.black,
               ),
             ),
           ),
@@ -265,7 +265,7 @@ class CellWidget extends StatelessWidget {
             Container(
               margin: const EdgeInsets.all(1.5),
               decoration: const BoxDecoration(
-                color: Color.fromRGBO(255, 135, 2, 0.25),
+                color: AppColors.mandarinTransparent,
                 shape: BoxShape.circle,
               ),
             ),

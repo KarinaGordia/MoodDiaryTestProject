@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mood_diary/app_icons.dart';
+import 'package:mood_diary/ui/theme/theme.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget_model.dart';
 import 'package:mood_diary/ui/widgets/time_widget/time_widget.dart';
@@ -51,7 +52,7 @@ class _EmotionScreenWidgetState extends State<EmotionScreenWidget>
               margin: const EdgeInsets.symmetric(horizontal: 44),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(47.0),
-                color: const Color.fromRGBO(242, 242, 242, 1),
+                color: AppColors.grey4,
               ),
               child: TabBar(
                 tabAlignment: TabAlignment.start,

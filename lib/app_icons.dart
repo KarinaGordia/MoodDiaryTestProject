@@ -15,7 +15,6 @@
 ///
 import 'package:flutter/widgets.dart';
 
-
 class AppIcons {
   AppIcons._();
 
@@ -24,4 +23,5 @@ class AppIcons {
 
   static const IconData diary = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData statistic = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData union = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

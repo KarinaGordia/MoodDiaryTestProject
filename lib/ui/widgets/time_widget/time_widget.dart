@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_diary/ui/theme/theme.dart';
 import 'package:mood_diary/ui/widgets/time_widget/time_widget_model.dart';
 
 class TimeWidget extends StatelessWidget {
@@ -34,7 +35,7 @@ class TimeWidget extends StatelessWidget {
             onPressed: () => model?.showCalendar(context),
             icon: const Icon(
               Icons.calendar_month,
-              color: Color.fromRGBO(188, 188, 191, 1),
+              color: AppColors.grey2,
             ),
           ),
         ],
