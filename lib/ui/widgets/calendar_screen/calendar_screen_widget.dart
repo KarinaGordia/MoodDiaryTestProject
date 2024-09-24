@@ -63,8 +63,9 @@ class CalendarScreenAppBarWidget extends StatelessWidget
             ),
             onPressed: () {
               scrollController?.animateTo(scrollController.initialScrollOffset,
-                  duration: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.linear);
+              model?.selectDay(model.today);
             },
             child: Text(
               'Сегодня',
@@ -209,18 +210,11 @@ class CellBuilderWidget extends StatelessWidget {
         itemCount: cells.length,
         itemBuilder: (context, index) {
           var item = cells[index];
-          var today = DateTime.now();
-          var isToday = item.day == today.day &&
-              item.month == today.month &&
-              item.year == today.year;
           var isSameMonth = item.month == month;
-          if(!isSameMonth) {
+          if (!isSameMonth) {
             return Container();
           }
           return CellWidget(
-            index: index,
-            isToday: isToday,
-            isSameMonth: isSameMonth,
             date: item,
           );
         });
@@ -228,24 +222,18 @@ class CellBuilderWidget extends StatelessWidget {
 }
 
 class CellWidget extends StatelessWidget {
-  const CellWidget(
-      {super.key,
-      required this.index,
-      required this.isToday,
-      required this.isSameMonth,
-      required this.date});
+  const CellWidget({super.key, required this.date});
 
-  final int index;
-  final bool isToday;
-  final bool isSameMonth;
   final DateTime date;
 
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
+    final bool isToday = model?.today.compareTo(date) == 0;
+
     return GestureDetector(
       onTap: () {
-        model.selectDay(date);
+        model?.selectDay(date);
       },
       child: Stack(
         children: <Widget>[
@@ -273,7 +261,7 @@ class CellWidget extends StatelessWidget {
               ),
             ),
           ),
-          if (model!.selectedDate?.compareTo(date) == 0)
+          if (model?.selectedDate.compareTo(date) == 0)
             Container(
               margin: const EdgeInsets.all(1.5),
               decoration: const BoxDecoration(

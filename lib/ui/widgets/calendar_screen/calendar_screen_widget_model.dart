@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CalendarScreenWidgetModel extends ChangeNotifier {
-  final DateTime _today = DateTime.now();
-  late final ScrollController scrollController;
-  DateTime? selectedDate;
+  final _today = DateTime.now();
+  get today => DateTime(_today.year, _today.month, _today.day);
+
+  late final ScrollController _scrollController;
+  get scrollController => _scrollController;
+
+  late DateTime _selectedDate;
+  get selectedDate => _selectedDate;
 
   CalendarScreenWidgetModel() {
-    scrollController = ScrollController(
+    _selectedDate = today;
+    _scrollController = ScrollController(
       initialScrollOffset: getInitialScrollOffset().toDouble(),
       keepScrollOffset: true,
     );
@@ -55,11 +61,7 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   }
 
   void selectDay(DateTime date) {
-    if(date == selectedDate) {
-      selectedDate = null;
-    } else {
-      selectedDate = date;
-    }
+    _selectedDate = date;
 
     notifyListeners();
   }
