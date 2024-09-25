@@ -1,49 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const backgroundLight = Color.fromRGBO(255, 253, 252, 1);
-const mandarin = Color.fromRGBO(255, 135, 2, 1);
-const black = Color.fromRGBO(76, 76, 105, 1);
-const white = Color.fromRGBO(255, 255, 255, 1);
-const grey2 = Color.fromRGBO(188, 188, 191, 1);
-const grey3 = Color.fromRGBO(145, 158, 171, 1);
-const grey4 = Color.fromRGBO(242, 242, 242, 1);
-const grey5 = Color.fromRGBO(225, 221, 216, 1);
-const shadow = Color.fromRGBO(182, 161, 192, 0.11);
+abstract class AppColors {
+  static const backgroundLight = Color.fromRGBO(255, 253, 252, 1);
+  static const mandarin = Color.fromRGBO(255, 135, 2, 1);
+  static const black = Color.fromRGBO(76, 76, 105, 1);
+  static const white = Color.fromRGBO(255, 255, 255, 1);
+  static const grey2 = Color.fromRGBO(188, 188, 191, 1);
+  static const grey3 = Color.fromRGBO(145, 158, 171, 1);
+  static const grey4 = Color.fromRGBO(242, 242, 242, 1);
+  static const grey5 = Color.fromRGBO(225, 221, 216, 1);
+  static const mandarinTransparent = Color.fromRGBO(255, 135, 2, 0.25);
+  static const shadow = Color.fromRGBO(182, 161, 192, 0.11);
+}
 
 final appTheme = ThemeData(
-  //colorScheme: ColorScheme.fromSeed(seedColor: mandarin),
-  primaryColor: mandarin,
-  scaffoldBackgroundColor: backgroundLight,
+  primaryColor: AppColors.mandarin,
+  scaffoldBackgroundColor: AppColors.backgroundLight,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: AppColors.backgroundLight,
+    surfaceTintColor: AppColors.backgroundLight,
+  ),
   tabBarTheme: TabBarTheme(
     indicatorSize: TabBarIndicatorSize.tab,
     indicator: BoxDecoration(
       borderRadius: BorderRadius.circular(47.0),
-      color: mandarin,
+      color: AppColors.mandarin,
     ),
     labelColor: Colors.white,
     labelStyle: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w500,
       fontSize: 12,
-      color: white,
+      color: AppColors.white,
     ),
-    unselectedLabelColor: grey2,
+    unselectedLabelColor: AppColors.grey2,
     unselectedLabelStyle: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w500,
       fontSize: 12,
-      color: grey2,
+      color: AppColors.grey2,
     ),
     dividerHeight: 0,
   ),
   snackBarTheme: SnackBarThemeData(
-    backgroundColor: white,
+    backgroundColor: AppColors.white,
     contentTextStyle: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 14,
-      color: black,
+      color: AppColors.black,
     ),
   ),
   filledButtonTheme: FilledButtonThemeData(
@@ -53,7 +59,7 @@ final appTheme = ThemeData(
             fontFamily: GoogleFonts.nunito().fontFamily,
             fontWeight: FontWeight.w400,
             fontSize: 20,
-            color: white,
+            color: AppColors.white,
           ),
         ),
         minimumSize: const WidgetStatePropertyAll(
@@ -68,15 +74,15 @@ final appTheme = ThemeData(
   ),
   chipTheme: ChipThemeData(
       showCheckmark: false,
-      selectedColor: mandarin,
-      backgroundColor: white,
+      selectedColor: AppColors.mandarin,
+      backgroundColor: AppColors.white,
       surfaceTintColor: Colors.transparent,
       padding: EdgeInsets.zero,
       labelPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       elevation: 4,
       pressElevation: 4,
-      shadowColor: shadow,
-      selectedShadowColor: shadow,
+      shadowColor:AppColors.shadow,
+      selectedShadowColor: AppColors.shadow,
       side: BorderSide.none,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
@@ -86,43 +92,43 @@ final appTheme = ThemeData(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w800,
       fontSize: 16,
-      color: black,
+      color: AppColors.black,
     ),
     labelMedium: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 14,
-      color: black,
+      color: AppColors.black,
     ),
     labelSmall: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 11,
-      color: black,
+      color: AppColors.black,
     ),
     displayMedium: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 14,
-      color: grey3,
+      color: AppColors.grey3,
     ),
     displaySmall: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 11,
-      color: grey3,
+      color: AppColors.grey3,
     ),
     headlineLarge: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w700,
       fontSize: 18,
-      color: grey2,
+      color: AppColors.grey2,
     ),
     headlineMedium: TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 14,
-      color: grey2,
+      color: AppColors.grey2,
     ),
   ),
 );

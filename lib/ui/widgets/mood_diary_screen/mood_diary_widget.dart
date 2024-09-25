@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_diary/domain/entity/feeling.dart';
+import 'package:mood_diary/ui/theme/theme.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget_model.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/slider_widget/slider_widget.dart';
 
@@ -54,7 +55,7 @@ class SaveButton extends StatelessWidget {
       child: FilledButton(
           style: ButtonStyle(
             backgroundColor: isDiaryFilled!
-                ? const WidgetStatePropertyAll(Color.fromRGBO(255, 135, 2, 1))
+                ? const WidgetStatePropertyAll(AppColors.mandarin)
                 : null,
           ),
           onPressed: isDiaryFilled
@@ -95,7 +96,7 @@ class NotesWidget extends StatelessWidget {
               color: Colors.white,
               boxShadow: const [
                 BoxShadow(
-                  color: Color.fromRGBO(182, 161, 192, 0.11),
+                  color: AppColors.shadow,
                   blurRadius: 10,
                   offset: Offset(2, 4),
                 ),
@@ -107,7 +108,7 @@ class NotesWidget extends StatelessWidget {
                 maxLines: null,
                 expands: true,
                 style: Theme.of(context).textTheme.labelMedium,
-                cursorColor: const Color.fromRGBO(76, 76, 105, 1),
+                cursorColor: AppColors.black,
                 decoration: InputDecoration.collapsed(
                     hintText: 'Введите заметку',
                     hintStyle: Theme.of(context).textTheme.headlineMedium),
@@ -217,8 +218,8 @@ class _SubFeelingWidgetState extends State<SubFeelingWidget> {
         fontWeight: FontWeight.w400,
         fontSize: 11,
         color: isSelected
-            ? const Color.fromRGBO(255, 255, 255, 1)
-            : const Color.fromRGBO(76, 76, 105, 1),
+            ? AppColors.white
+            : AppColors.black,
       ),
       selected: isSelected,
       onSelected: (bool value) {
@@ -238,7 +239,7 @@ class FeelingButtonWidget extends StatelessWidget {
     final model = MoodDiaryWidgetModelProvider.watch(context)?.model;
     final border = feeling.isSelected
         ? Border.all(
-            color: const Color.fromRGBO(255, 135, 2, 1),
+            color: AppColors.mandarin,
             width: 2,
           )
         : null;
@@ -257,7 +258,7 @@ class FeelingButtonWidget extends StatelessWidget {
           border: border,
           boxShadow: const [
             BoxShadow(
-              color: Color.fromRGBO(182, 161, 192, 0.11),
+              color: AppColors.shadow,
               blurRadius: 10,
               offset: Offset(2, 4),
             ),

@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mood_diary/app_icons.dart';
-import 'package:mood_diary/ui/widgets/emotion_screen/emotion_screen_widget_model.dart';
+import 'package:mood_diary/ui/theme/theme.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget_model.dart';
+import 'package:mood_diary/ui/widgets/time_widget/time_widget.dart';
+import 'package:mood_diary/ui/widgets/time_widget/time_widget_model.dart';
 
 class EmotionScreenWidget extends StatefulWidget {
   const EmotionScreenWidget({super.key});
@@ -50,7 +52,7 @@ class _EmotionScreenWidgetState extends State<EmotionScreenWidget>
               margin: const EdgeInsets.symmetric(horizontal: 44),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(47.0),
-                color: const Color.fromRGBO(242, 242, 242, 1),
+                color: AppColors.grey4,
               ),
               child: TabBar(
                 tabAlignment: TabAlignment.start,
@@ -115,44 +117,4 @@ class TabWidget extends StatelessWidget {
   }
 }
 
-class TimeWidget extends StatelessWidget {
-  const TimeWidget({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    final model = TimeWidgetModelProvider.watch(context)?.model;
-    return Padding(
-      padding: const EdgeInsets.only(top:15, bottom: 10, left:20, right:20,),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(
-            width: 24,
-          ),
-          Expanded(
-            child: Text(
-              '${model?.day} ${model?.russianMonth[model.monthIndex]} ${model?.time}',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-          ),
-          IconButton(
-            padding: EdgeInsets.zero,
-            iconSize: 24,
-            style: ButtonStyle(
-              padding: WidgetStatePropertyAll(EdgeInsets.zero),
-              fixedSize: WidgetStateProperty.all(Size(24, 24)),
-            ),
-            onPressed: () {},
-            icon: const Icon(
-              Icons.calendar_month,
-              color: Color.fromRGBO(188, 188, 191, 1),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

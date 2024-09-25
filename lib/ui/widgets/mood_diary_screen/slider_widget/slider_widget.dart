@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_diary/ui/theme/theme.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/mood_diary_widget_model.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/slider_widget/custom_thumb.dart';
 import 'package:mood_diary/ui/widgets/mood_diary_screen/slider_widget/custom_track.dart';
@@ -43,7 +44,7 @@ class _EmotionSliderState extends State<EmotionSlider> {
               color: Colors.white,
               boxShadow: const [
                 BoxShadow(
-                  color: Color.fromRGBO(182, 161, 192, 0.11),
+                  color: AppColors.shadow,
                   blurRadius: 10,
                   offset: Offset(2, 4),
                 ),
@@ -61,7 +62,7 @@ class _EmotionSliderState extends State<EmotionSlider> {
                       return Container(
                         width: 2,
                         height: 8,
-                        color: const Color.fromRGBO(225, 221, 216, 1),
+                        color: AppColors.grey5,
                       );
                     }),
                   ),
@@ -73,13 +74,13 @@ class _EmotionSliderState extends State<EmotionSlider> {
                     trackHeight: 6,
                     thumbShape:
                     const CircleThumbShape(thumbRadius: 9, borderWidth: 4),
-                    thumbColor: const Color.fromRGBO(255, 135, 2, 1),
-                    disabledThumbColor: const Color.fromRGBO(225, 221, 216, 1),
+                    thumbColor: AppColors.mandarin,
+                    disabledThumbColor: AppColors.grey5,
                   ),
                   child: Slider(
                     value: _currentValue,
-                    activeColor: const Color.fromRGBO(255, 135, 2, 1),
-                    inactiveColor: const Color.fromRGBO(225, 221, 216, 1),
+                    activeColor: AppColors.mandarin,
+                    inactiveColor: AppColors.grey5,
                     max: 1,
                     allowedInteraction: SliderInteraction.tapAndSlide,
                     onChanged: isFeelingSelected! ? (value) {
