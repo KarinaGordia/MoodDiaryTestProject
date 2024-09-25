@@ -39,50 +39,54 @@ class _EmotionScreenWidgetState extends State<EmotionScreenWidget>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            TimeWidgetModelProvider(
-              model: _timeWidgetModel,
-              child: const TimeWidget(),
-            ),
-            Container(
-              height: 30,
-              margin: const EdgeInsets.symmetric(horizontal: 44),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(47.0),
-                color: AppColors.grey4,
-              ),
-              child: TabBar(
-                tabAlignment: TabAlignment.start,
-                controller: _tabController,
-                isScrollable: true,
-                tabs: const [
-                  TabWidget(label:'Дневник настроения',icon: AppIcons.diary,),
-                  TabWidget(label:'Статистика',icon: AppIcons.statistic,),
-                ],
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  MoodDiaryWidgetModelProvider(
-                    model: _moodDiaryModel,
-                    child: const MoodDiaryWidget(),
-                  ),
-                  Center(
-                    child: Text(
-                      'Здесь будет отображаться ваша статистика',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: FlexibleSpaceBar(
+          centerTitle: true,
+          titlePadding: EdgeInsets.zero,
+          title: TimeWidgetModelProvider(
+            model: _timeWidgetModel,
+            child: const TimeWidget(),
+          ),
         ),
+      ),
+      body: Column(
+        children: [
+          Container(
+            height: 30,
+            margin: const EdgeInsets.symmetric(horizontal: 44),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(47.0),
+              color: AppColors.grey4,
+            ),
+            child: TabBar(
+              tabAlignment: TabAlignment.start,
+              controller: _tabController,
+              isScrollable: true,
+              tabs: const [
+                TabWidget(label:'Дневник настроения',icon: AppIcons.diary,),
+                TabWidget(label:'Статистика',icon: AppIcons.statistic,),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                MoodDiaryWidgetModelProvider(
+                  model: _moodDiaryModel,
+                  child: const MoodDiaryWidget(),
+                ),
+                Center(
+                  child: Text(
+                    'Здесь будет отображаться ваша статистика',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

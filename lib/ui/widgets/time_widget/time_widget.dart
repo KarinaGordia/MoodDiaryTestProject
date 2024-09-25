@@ -11,7 +11,7 @@ class TimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = TimeWidgetModelProvider.watch(context)?.model;
     return Padding(
-      padding: const EdgeInsets.only(top:15, bottom: 10, left:20, right:20,),
+      padding: const EdgeInsets.only(bottom: 10,),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
