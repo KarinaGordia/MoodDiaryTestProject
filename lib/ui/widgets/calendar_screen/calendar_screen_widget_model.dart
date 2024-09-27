@@ -5,16 +5,20 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   get today => DateTime(_today.year, _today.month, _today.day);
 
   late final ScrollController _scrollController;
-  get scrollController => _scrollController;
+  ScrollController get monthScrollController => _scrollController;
 
   late DateTime _selectedDate;
   get selectedDate => _selectedDate;
 
+  int? selectedYear;
+
+  bool _isMonthlyFormat = true;
+  bool get isMonthlyFormat => _isMonthlyFormat;
+
   CalendarScreenWidgetModel() {
     _selectedDate = today;
     _scrollController = ScrollController(
-      initialScrollOffset: getInitialScrollOffset().toDouble(),
-      keepScrollOffset: true,
+      initialScrollOffset: setInitialScrollOffset(today.year, today.month),
     );
   }
 
@@ -54,15 +58,21 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
     return cells;
   }
 
-  int getInitialScrollOffset() {
-    int yearsBetween = _today.year - startingYear;
-    int monthsCount = yearsBetween * monthsInYear + _today.month - 1;
-    return monthsCount * averageMonthWidgetHeight;
+  double setInitialScrollOffset(int year, int month) {
+    int yearsBetween = year - startingYear;
+    int monthsCount = yearsBetween * monthsInYear + month - 1;
+    return (monthsCount * averageMonthWidgetHeight).toDouble();
   }
 
   void selectDay(DateTime date) {
     _selectedDate = date;
 
+    notifyListeners();
+  }
+
+  void changeCalendarFormat() {
+    _isMonthlyFormat = !_isMonthlyFormat;
+    print('Format was changed');
     notifyListeners();
   }
 }
