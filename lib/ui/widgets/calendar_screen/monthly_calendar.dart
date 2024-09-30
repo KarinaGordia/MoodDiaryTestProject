@@ -54,7 +54,7 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
   void initState() {
     final model = CalendarScreenWidgetModelProvider.read(context)?.model;
     _scrollController = ScrollController(
-      initialScrollOffset: model!.setInitialScrollOffset(),
+      initialScrollOffset: model!.setMonthInitialScrollOffset(),
     );
     model.monthScrollController = _scrollController;
     super.initState();
@@ -74,6 +74,7 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
         itemBuilder: (BuildContext context, int index) {
           var monthDate =
           DateTime(CalendarScreenWidgetModel.startingYear, index + 1, 1);
+
           return MonthWidget(
             monthDate: monthDate,
             description: monthDescription,

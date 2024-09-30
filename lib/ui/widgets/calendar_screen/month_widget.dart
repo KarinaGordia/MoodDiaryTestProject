@@ -63,26 +63,6 @@ class MonthWidget extends StatelessWidget {
     );
   }
  }
-// class MonthWidget extends StatelessWidget {
-//   const MonthWidget(
-//       {super.key, required this.monthDate, required this.description});
-//
-//   final DateTime monthDate;
-//   final MonthDescription description;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final model = CalendarScreenWidgetModelProvider
-//         .watch(context)
-//         ?.model;
-//
-//     return DayCellBuilderWidget(
-//       cells: model!.generateMonthCells(monthDate),
-//       month: monthDate.month,
-//       description: description,
-//     );
-//   }
-// }
 
 class DayCellBuilderWidget extends StatelessWidget {
   const DayCellBuilderWidget(
