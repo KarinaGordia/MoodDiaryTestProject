@@ -162,7 +162,7 @@ class DayCellWidget extends StatelessWidget {
               color: AppColors.black,
             ),
           ),
-          if (model?.selectedDate.compareTo(date) == 0)
+          if (model?.selectedDay.compareTo(date) == 0)
             Container(
               margin: const EdgeInsets.all(1.5),
               decoration: const BoxDecoration(

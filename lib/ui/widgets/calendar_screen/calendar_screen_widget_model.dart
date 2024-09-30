@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 
 class CalendarScreenWidgetModel extends ChangeNotifier {
   final _today = DateTime.now();
-  get today => DateTime(_today.year, _today.month, _today.day);
+  DateTime get today => DateTime(_today.year, _today.month, _today.day);
 
-  late final ScrollController _scrollController;
-  ScrollController get monthScrollController => _scrollController;
+  late ScrollController monthScrollController;
 
-  late DateTime _selectedDate;
-  get selectedDate => _selectedDate;
+  late DateTime _selectedDay;
+  get selectedDay => _selectedDay;
 
+  DateTime? selectedMonthDate;
   int? selectedYear;
 
   bool _isMonthlyFormat = true;
   bool get isMonthlyFormat => _isMonthlyFormat;
 
   CalendarScreenWidgetModel() {
-    _selectedDate = today;
-    _scrollController = ScrollController(
-      initialScrollOffset: setInitialScrollOffset(today.year, today.month),
-    );
+    _selectedDay = today;
   }
 
   static const startingYear = 2023;
@@ -58,21 +55,22 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
     return cells;
   }
 
-  double setInitialScrollOffset(int year, int month) {
-    int yearsBetween = year - startingYear;
-    int monthsCount = yearsBetween * monthsInYear + month - 1;
+  double setInitialScrollOffset() {
+    selectedMonthDate ??= today;
+    int yearsBetween = selectedMonthDate!.year - startingYear;
+    int monthsCount = yearsBetween * monthsInYear + selectedMonthDate!.month - 1;
     return (monthsCount * averageMonthWidgetHeight).toDouble();
   }
 
   void selectDay(DateTime date) {
-    _selectedDate = date;
+    _selectedDay = date;
 
     notifyListeners();
   }
 
   void changeCalendarFormat() {
     _isMonthlyFormat = !_isMonthlyFormat;
-    print('Format was changed');
+
     notifyListeners();
   }
 }

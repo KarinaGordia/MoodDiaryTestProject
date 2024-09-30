@@ -33,23 +33,44 @@ class MonthlyCalendarWidget extends StatelessWidget {
             }),
           ),
         ),
-        ScrollCalendarWidget(),
+        const ScrollCalendarWidget(),
       ],
     );
   }
 }
 
-class ScrollCalendarWidget extends StatelessWidget {
-  ScrollCalendarWidget({super.key});
+class ScrollCalendarWidget extends StatefulWidget {
+  const ScrollCalendarWidget({super.key});
 
+  @override
+  State<ScrollCalendarWidget> createState() => _ScrollCalendarWidgetState();
+}
+
+class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
   final monthDescription = MonthlyCalendarMonthDescription();
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+    _scrollController = ScrollController(
+      initialScrollOffset: model!.setInitialScrollOffset(),
+    );
+    model.monthScrollController = _scrollController;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
     return Expanded(
       child: ListView.builder(
-        controller: model?.monthScrollController,
+        controller: _scrollController,
         itemBuilder: (BuildContext context, int index) {
           var monthDate =
           DateTime(CalendarScreenWidgetModel.startingYear, index + 1, 1);

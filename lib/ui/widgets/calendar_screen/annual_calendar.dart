@@ -43,6 +43,7 @@ class AnnualCalendarWidget extends StatelessWidget {
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     model?.changeCalendarFormat();
+                    model?.selectedMonthDate = monthDate;
                   },
                   child: MonthWidget(
                     monthDate: monthDate,
