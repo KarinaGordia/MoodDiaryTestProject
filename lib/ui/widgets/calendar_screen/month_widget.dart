@@ -14,9 +14,7 @@ class MonthWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider
-        .watch(context)
-        ?.model;
+    final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
 
     return Padding(
       padding: description.monthWidgetPadding,
@@ -32,9 +30,7 @@ class MonthWidget extends StatelessWidget {
               child: Text(
                 DateFormat('yyyy').format(monthDate),
                 style: TextStyle(
-                  fontFamily: GoogleFonts
-                      .nunito()
-                      .fontFamily,
+                  fontFamily: GoogleFonts.nunito().fontFamily,
                   fontWeight: FontWeight.w700,
                   fontSize: description.yearFontSize,
                   color: AppColors.grey2,
@@ -42,11 +38,9 @@ class MonthWidget extends StatelessWidget {
               ),
             ),
           Text(
-            DateFormat('MMMM').format(monthDate),
+            CalendarScreenWidgetModel.russianMonthNames[monthDate.month - 1],
             style: TextStyle(
-              fontFamily: GoogleFonts
-                  .nunito()
-                  .fontFamily,
+              fontFamily: GoogleFonts.nunito().fontFamily,
               fontWeight: FontWeight.w700,
               fontSize: description.monthFontSize,
               color: AppColors.black,
@@ -62,11 +56,14 @@ class MonthWidget extends StatelessWidget {
       ),
     );
   }
- }
+}
 
 class DayCellBuilderWidget extends StatelessWidget {
   const DayCellBuilderWidget(
-      {super.key, required this.cells, required this.month, required this.description});
+      {super.key,
+      required this.cells,
+      required this.month,
+      required this.description});
 
   final List<DateTime> cells;
   final int month;
@@ -98,21 +95,21 @@ class DayCellBuilderWidget extends StatelessWidget {
 }
 
 class DayCellWidget extends StatelessWidget {
-  const DayCellWidget({super.key, required this.date, required this.description});
+  const DayCellWidget(
+      {super.key, required this.date, required this.description});
 
   final DateTime date;
   final MonthDescription description;
+
   @override
   Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider
-        .watch(context)
-        ?.model;
+    final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
     final bool isToday = model?.today.compareTo(date) == 0;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        if(model!.isMonthlyFormat) {
+        if (model!.isMonthlyFormat) {
           model.selectDay(date);
         }
       },
@@ -121,10 +118,10 @@ class DayCellWidget extends StatelessWidget {
         children: <Widget>[
           if (isToday && model!.isMonthlyFormat)
             Positioned(
-              top:description.todayMarkGapFromCenter,
+              top: description.todayMarkGapFromCenter,
               child: Container(
-                width:description.todayMarkSize,
-                height:description.todayMarkSize,
+                width: description.todayMarkSize,
+                height: description.todayMarkSize,
                 decoration: const BoxDecoration(
                   color: AppColors.mandarin,
                   shape: BoxShape.circle,
@@ -134,9 +131,7 @@ class DayCellWidget extends StatelessWidget {
           Text(
             date.day.toString(),
             style: TextStyle(
-              fontFamily: GoogleFonts
-                  .nunito()
-                  .fontFamily,
+              fontFamily: GoogleFonts.nunito().fontFamily,
               fontSize: description.dayFontSize,
               fontWeight: FontWeight.w500,
               color: AppColors.black,

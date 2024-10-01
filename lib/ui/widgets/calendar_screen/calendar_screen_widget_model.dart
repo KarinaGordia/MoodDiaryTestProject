@@ -35,6 +35,20 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
     'ПТ',
     'СБ',
     'ВС'];
+  static const russianMonthNames = <String>[
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+  ];
 
   List<DateTime> generateMonthCells(DateTime monthDate) {
     var cells = <DateTime>[];
