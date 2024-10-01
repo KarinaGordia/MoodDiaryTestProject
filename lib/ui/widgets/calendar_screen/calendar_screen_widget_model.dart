@@ -7,7 +7,7 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   late ScrollController monthScrollController;
 
   late DateTime _selectedDay;
-  get selectedDay => _selectedDay;
+  DateTime get selectedDay => _selectedDay;
 
   DateTime? selectedMonthDate;
   int? selectedYear;
@@ -15,8 +15,12 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   bool _isMonthlyFormat = true;
   bool get isMonthlyFormat => _isMonthlyFormat;
 
+  late final double _todayMonthInitialOffset;
+  double get todayMonthInitialOffset => _todayMonthInitialOffset;
+
   CalendarScreenWidgetModel() {
     _selectedDay = today;
+    _todayMonthInitialOffset = setMonthInitialScrollOffset();
   }
 
   static const startingYear = 2023;
@@ -71,6 +75,7 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
 
   void changeCalendarFormat() {
     _isMonthlyFormat = !_isMonthlyFormat;
+    if(_isMonthlyFormat) selectedMonthDate = null;
 
     notifyListeners();
   }
