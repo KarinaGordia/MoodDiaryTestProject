@@ -7,9 +7,9 @@ import 'package:mood_diary/ui/widgets/calendar_screen/month_description.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/month_widget.dart';
 
 class AnnualCalendarWidget extends StatefulWidget {
-  const AnnualCalendarWidget({super.key, required this.year,});
-
-  final int? year;
+  const AnnualCalendarWidget({
+    super.key,
+  });
 
   @override
   State<AnnualCalendarWidget> createState() => _AnnualCalendarWidgetState();
@@ -17,73 +17,119 @@ class AnnualCalendarWidget extends StatefulWidget {
 
 class _AnnualCalendarWidgetState extends State<AnnualCalendarWidget> {
   final monthDescription = AnnualCalendarMonthDescription();
-  late final ScrollController _scrollController;
+  final UniqueKey _center = UniqueKey();
 
-  double _calculateInitialScrollOffset() {
-    return ((widget.year! - CalendarScreenWidgetModel.startingYear) *
-        CalendarScreenWidgetModel.yearWidgetHeight ).toDouble();
-  }
-
-  @override
-  void initState() {
-    _scrollController = ScrollController(
-      initialScrollOffset: _calculateInitialScrollOffset(),
+  Widget _getList(bool isForward, int year) {
+    return SliverList.builder(
+      itemBuilder: (BuildContext context, int index) {
+        final Widget child;
+        if (index == 0) {
+          child = const SizedBox.shrink();
+        } else {
+          child = YearWidget(
+            year: isForward ? (year + index) : (year - index),
+            monthDescription: monthDescription,
+          );
+        }
+        return child;
+      },
     );
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider
-        .watch(context)
-        ?.model;
-    return ListView.builder(
-      controller: _scrollController,
-      itemBuilder: (BuildContext context, int index) {
-        int year = CalendarScreenWidgetModel.startingYear + index;
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                '$year',
-                style: TextStyle(
-                  fontFamily: GoogleFonts
-                      .nunito()
-                      .fontFamily,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 26,
-                  color: AppColors.black,
-                ),
-              ),
-            ),
-            GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.05,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 35,
-                ),
-                itemCount: CalendarScreenWidgetModel.monthsInYear,
-                itemBuilder: (context, index) {
-                  var monthDate = DateTime(year, index + 1, 1);
-                  return GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      model?.changeCalendarFormat();
-                      model?.selectedMonthDate = monthDate;
-                    },
-                    child: MonthWidget(
-                      monthDate: monthDate,
-                      description: monthDescription,
-                    ),
-                  );
-                }),
-          ],
-        );
-      },
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+    final todayDate = model?.today;
+    return CustomScrollView(
+      scrollDirection: Axis.vertical,
+      anchor: 0,
+      center: _center,
+      slivers: <Widget>[
+        _getList(
+          false,
+          todayDate!.year,
+        ),
+        SliverToBoxAdapter(
+          key: _center,
+          child: YearWidget(
+            year: model!.selectedYear,
+            monthDescription: monthDescription,
+          ),
+        ),
+        _getList(
+          true,
+          todayDate.year,
+        ),
+      ],
     );
+  }
+}
+
+class YearWidget extends StatelessWidget {
+  const YearWidget(
+      {super.key, required this.year, required this.monthDescription});
+
+  final int? year;
+  final MonthDescription monthDescription;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            '$year',
+            style: TextStyle(
+              fontFamily: GoogleFonts.nunito().fontFamily,
+              fontWeight: FontWeight.w800,
+              fontSize: 26,
+              color: AppColors.black,
+            ),
+          ),
+        ),
+        MonthGridViewWidget(
+          year: year,
+          monthDescription: monthDescription,
+        ),
+      ],
+    );
+  }
+}
+
+class MonthGridViewWidget extends StatelessWidget {
+  const MonthGridViewWidget(
+      {super.key, required this.year, required this.monthDescription});
+
+  final int? year;
+  final MonthDescription monthDescription;
+
+  @override
+  Widget build(BuildContext context) {
+    final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
+    return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1.05,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 35,
+        ),
+        itemCount: CalendarScreenWidgetModel.monthsInYear,
+        itemBuilder: (context, index) {
+          var monthDate = DateTime(year!, index + 1, 1);
+          return GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              model?.changeCalendarFormat();
+              model?.selectedMonthDate = monthDate;
+            },
+            child: MonthWidget(
+              monthDate: monthDate,
+              description: monthDescription,
+            ),
+          );
+        });
   }
 }

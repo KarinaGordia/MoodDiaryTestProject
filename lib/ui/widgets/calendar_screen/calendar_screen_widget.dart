@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:mood_diary/app_icons.dart';
 import 'package:mood_diary/ui/theme/theme.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/annual_calendar.dart';
@@ -37,7 +36,7 @@ class CalendarScreenWidgetBody extends StatelessWidget {
         ),
         child: model!.isMonthlyFormat
             ? const MonthlyCalendarWidget()
-            : AnnualCalendarWidget(year: model.selectedYear),
+            : const AnnualCalendarWidget(),
       ),
     );
   }
@@ -76,15 +75,15 @@ class CalendarScreenAppBarWidget extends StatelessWidget
                   WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
             ),
             onPressed: () {
-              if (!model!.isMonthlyFormat) {
-                model.changeCalendarFormat();
-              } else {
-                scrollController = model.monthScrollController;
-                scrollController.animateTo(model.todayMonthInitialOffset,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.linear);
-                model.selectDay(model.today);
-              }
+              // if (!model!.isMonthlyFormat) {
+              //   model.changeCalendarFormat();
+              // } else {
+              //   scrollController = model.monthScrollController;
+              //   scrollController.animateTo(model.todayMonthInitialOffset,
+              //       duration: const Duration(milliseconds: 300),
+              //       curve: Curves.linear);
+              //   model.selectDay(model.today);
+              // }
             },
             child: Text(
               'Сегодня',
