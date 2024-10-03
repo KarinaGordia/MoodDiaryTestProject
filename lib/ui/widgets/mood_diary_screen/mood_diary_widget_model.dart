@@ -20,6 +20,8 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
   final List<String> _displayedSubFeelings = [];
   List<String> get subFeelings => _displayedSubFeelings.toList();
 
+  double sliderCurrentValue = 0.5;
+
   String _noteText = '';
 
   void resetSelection() {
@@ -31,16 +33,17 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
     _selectedSubFeelings.clear();
     _displayedSubFeelings.clear();
 
+    sliderCurrentValue = 0.5;
+
     notifyListeners();
   }
 
   bool isDiaryFilled() {
     bool isFeelingSelected = _selectedFeelings.isNotEmpty;
     bool isSubFeelingSelected = _selectedSubFeelings.isNotEmpty;
-    //bool isNoteAdded = _noteText.trim().isNotEmpty;
+    bool isNoteAdded = _noteText.trim().isNotEmpty;
 
-    //return isFeelingSelected && isSubFeelingSelected && isNoteAdded;
-    return isFeelingSelected && isSubFeelingSelected;
+    return isFeelingSelected && isSubFeelingSelected && isNoteAdded;
   }
 
   set noteText(String value) {
