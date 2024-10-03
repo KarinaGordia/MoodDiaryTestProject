@@ -104,7 +104,7 @@ class DayCellWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
-    final bool isToday = model?.today.compareTo(date) == 0;
+    final bool? isToday = model?.isToday(date);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -116,7 +116,7 @@ class DayCellWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          if (isToday && model!.isMonthlyFormat)
+          if (isToday!)
             Positioned(
               top: description.todayMarkGapFromCenter,
               child: Container(

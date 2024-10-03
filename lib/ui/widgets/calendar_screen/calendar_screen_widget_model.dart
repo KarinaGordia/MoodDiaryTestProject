@@ -4,8 +4,7 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   final _today = DateTime.now();
   DateTime get today => DateTime(_today.year, _today.month, _today.day);
 
-  //?
-  late ScrollController monthScrollController;
+  final todayMonthGlobalKey = GlobalKey();
 
   late DateTime _selectedDay;
   DateTime get selectedDay => _selectedDay;
@@ -17,21 +16,12 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   bool _isMonthlyFormat = true;
   bool get isMonthlyFormat => _isMonthlyFormat;
 
-  //?
-  late final double _todayMonthInitialOffset;
-  double get todayMonthInitialOffset => _todayMonthInitialOffset;
-
   CalendarScreenWidgetModel() {
     _selectedDay = today;
     selectedMonthDate = today;
-    _todayMonthInitialOffset = setMonthInitialScrollOffset();
   }
 
-  //?
-  static const startingYear = 2023;
   static const monthsInYear = 12;
-  static const averageMonthWidgetHeight = 320;
-  static const yearWidgetHeight = 1114;
 
   static const russianDaysOfWeek = <String>[
     'ПН',
@@ -80,12 +70,8 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
     return cells;
   }
 
-  //?
-  double setMonthInitialScrollOffset() {
-    selectedMonthDate ??= today;
-    int yearsBetween = selectedMonthDate!.year - startingYear;
-    int monthsCount = yearsBetween * monthsInYear + selectedMonthDate!.month - 1;
-    return (monthsCount * averageMonthWidgetHeight).toDouble();
+  bool isToday(DateTime date) {
+    return today.compareTo(date) == 0;
   }
 
   void selectDay(DateTime date) {
@@ -96,7 +82,7 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
 
   void changeCalendarFormat() {
     _isMonthlyFormat = !_isMonthlyFormat;
-    // if(_isMonthlyFormat) selectedMonthDate = null;
+    if(_isMonthlyFormat) selectedMonthDate = null;
 
     notifyListeners();
   }

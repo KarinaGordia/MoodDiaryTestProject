@@ -51,7 +51,6 @@ class CalendarScreenAppBarWidget extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-    ScrollController scrollController;
     return AppBar(
       toolbarHeight: 52,
       leading: IconButton(
@@ -75,15 +74,15 @@ class CalendarScreenAppBarWidget extends StatelessWidget
                   WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
             ),
             onPressed: () {
-              // if (!model!.isMonthlyFormat) {
-              //   model.changeCalendarFormat();
-              // } else {
-              //   scrollController = model.monthScrollController;
-              //   scrollController.animateTo(model.todayMonthInitialOffset,
-              //       duration: const Duration(milliseconds: 300),
-              //       curve: Curves.linear);
-              //   model.selectDay(model.today);
-              // }
+              if (!model!.isMonthlyFormat) {
+                model.changeCalendarFormat();
+              } else {
+                if(model.todayMonthGlobalKey.currentContext != null) {
+                  Scrollable.ensureVisible(model.todayMonthGlobalKey.currentContext!,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.easeInOut);
+                }
+              }
             },
             child: Text(
               'Сегодня',

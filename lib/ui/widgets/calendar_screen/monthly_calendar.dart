@@ -47,21 +47,24 @@ class ScrollCalendarWidget extends StatefulWidget {
 }
 
 class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
-  final UniqueKey _center = UniqueKey();
+  final UniqueKey _initialMonth = UniqueKey();
   final monthDescription = MonthlyCalendarMonthDescription();
-  //late final ScrollController _scrollController;
+  late final ScrollController _scrollController;
 
-  Widget _getList(bool isForward, int year, int month) {
-    return SliverList.builder(
+  Widget _getList(bool isForward, DateTime date) {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+        return SliverList.builder(
       itemBuilder: (BuildContext context, int index) {
         final Widget child;
         var monthDate = isForward
-            ? DateTime(year, month + index, 1)
-            : DateTime(year, month - index, 1);
+            ? DateTime(date.year, date.month + index, 1)
+            : DateTime(date.year, date.month - index, 1);
         if (index == 0) {
           child = const SizedBox.shrink();
         } else {
+          bool isToday = monthDate.compareTo(DateTime(model!.today.year, model.today.month)) == 0;
           child = MonthWidget(
+            key: isToday ? model.todayMonthGlobalKey : null,
             monthDate: monthDate,
             description: monthDescription,
           );
@@ -71,41 +74,42 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
     );
   }
 
-  // @override
-  // void initState() {
-  //   final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-  //   _scrollController = ScrollController(
-  //     initialScrollOffset: model!.setMonthInitialScrollOffset(),
-  //   );
-  //   model.monthScrollController = _scrollController;
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-    final startDate = model?.selectedMonthDate;
+    final startDate = model?.selectedMonthDate ?? model?.today;
+    final isToday = model?.isToday(startDate!);
+
     return Expanded(
       child: CustomScrollView(
+        cacheExtent: 9999,
+        controller: _scrollController,
         scrollDirection: Axis.vertical,
         anchor: 0,
-        center: _center,
+        center: _initialMonth,
         slivers: <Widget>[
-          _getList(false, startDate!.year, startDate.month),
+          _getList(false, startDate!),
           SliverToBoxAdapter(
-            key: _center,
+            key: _initialMonth,
             child: MonthWidget(
+              key: isToday! ? model?.todayMonthGlobalKey : null,
               monthDate: startDate,
               description: monthDescription,
             ),
           ),
-          _getList(true, startDate.year, startDate.month),
+          _getList(true, startDate),
         ],
       ),
     );
