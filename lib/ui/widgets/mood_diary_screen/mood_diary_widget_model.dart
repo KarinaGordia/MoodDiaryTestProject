@@ -9,29 +9,38 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
   }
 
   final _feelings = <Feeling>[];
-
   List<Feeling> get feelings => _feelings.toList();
 
   final List<Feeling> _selectedFeelings = [];
-
   List<Feeling> get selectedFeelings => _selectedFeelings.toList();
 
   final List<String> _selectedSubFeelings = [];
-
   List<String> get selectedSubFeelings => _selectedSubFeelings.toList();
 
   final List<String> _displayedSubFeelings = [];
-
   List<String> get subFeelings => _displayedSubFeelings.toList();
 
   String _noteText = '';
 
+  void resetSelection() {
+    for(var feeling in _feelings) {
+      feeling.isSelected = false;
+    }
+
+    _selectedFeelings.clear();
+    _selectedSubFeelings.clear();
+    _displayedSubFeelings.clear();
+
+    notifyListeners();
+  }
+
   bool isDiaryFilled() {
     bool isFeelingSelected = _selectedFeelings.isNotEmpty;
     bool isSubFeelingSelected = _selectedSubFeelings.isNotEmpty;
-    bool isNoteAdded = _noteText.trim().isNotEmpty;
+    //bool isNoteAdded = _noteText.trim().isNotEmpty;
 
-    return isFeelingSelected && isSubFeelingSelected && isNoteAdded;
+    //return isFeelingSelected && isSubFeelingSelected && isNoteAdded;
+    return isFeelingSelected && isSubFeelingSelected;
   }
 
   set noteText(String value) {

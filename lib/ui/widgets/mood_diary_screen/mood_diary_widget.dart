@@ -66,6 +66,7 @@ class SaveButton extends StatelessWidget {
                       content: Text('Запись успешно сохранена!'),
                     ),
                   );
+                  model?.resetSelection();
                 }
               : null,
           child: const Text('Сохранить')),
