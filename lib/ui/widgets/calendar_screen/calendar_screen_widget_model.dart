@@ -2,25 +2,27 @@ import 'package:flutter/material.dart';
 
 class CalendarScreenWidgetModel extends ChangeNotifier {
   final _today = DateTime.now();
-  get today => DateTime(_today.year, _today.month, _today.day);
+  DateTime get today => DateTime(_today.year, _today.month, _today.day);
 
-  late final ScrollController _scrollController;
-  get scrollController => _scrollController;
+  final todayMonthGlobalKey = GlobalKey();
 
-  late DateTime _selectedDate;
-  get selectedDate => _selectedDate;
+  late DateTime _selectedDay;
+  DateTime get selectedDay => _selectedDay;
+
+  DateTime? selectedMonthDate;
+
+  int? selectedYear;
+
+  bool _isMonthlyFormat = true;
+  bool get isMonthlyFormat => _isMonthlyFormat;
 
   CalendarScreenWidgetModel() {
-    _selectedDate = today;
-    _scrollController = ScrollController(
-      initialScrollOffset: getInitialScrollOffset().toDouble(),
-      keepScrollOffset: true,
-    );
+    _selectedDay = today;
+    selectedMonthDate = today;
   }
 
-  static const startingYear = 2023;
   static const monthsInYear = 12;
-  static const averageMonthWidgetHeight = 320;
+
   static const russianDaysOfWeek = <String>[
     'ПН',
     'ВТ',
@@ -29,6 +31,20 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
     'ПТ',
     'СБ',
     'ВС'];
+  static const russianMonthNames = <String>[
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+  ];
 
   List<DateTime> generateMonthCells(DateTime monthDate) {
     var cells = <DateTime>[];
@@ -54,14 +70,19 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
     return cells;
   }
 
-  int getInitialScrollOffset() {
-    int yearsBetween = _today.year - startingYear;
-    int monthsCount = yearsBetween * monthsInYear + _today.month - 1;
-    return monthsCount * averageMonthWidgetHeight;
+  bool isToday(DateTime date) {
+    return today.compareTo(date) == 0;
   }
 
   void selectDay(DateTime date) {
-    _selectedDate = date;
+    _selectedDay = date;
+
+    notifyListeners();
+  }
+
+  void changeCalendarFormat() {
+    _isMonthlyFormat = !_isMonthlyFormat;
+    if(_isMonthlyFormat) selectedMonthDate = null;
 
     notifyListeners();
   }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:mood_diary/app_icons.dart';
 import 'package:mood_diary/ui/theme/theme.dart';
+import 'package:mood_diary/ui/widgets/calendar_screen/annual_calendar.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/calendar_screen_widget_model.dart';
+import 'package:mood_diary/ui/widgets/calendar_screen/monthly_calendar.dart';
 
 class CalendarScreenWidget extends StatelessWidget {
   CalendarScreenWidget({super.key});
@@ -24,12 +25,19 @@ class CalendarScreenWidgetBody extends StatelessWidget {
     super.key,
   });
 
-  // @override
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CalendarScreenAppBarWidget(),
-      body: CalendarWidget(),
+    final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
+    return Scaffold(
+      appBar: const CalendarScreenAppBarWidget(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: model!.isMonthlyFormat
+            ? const MonthlyCalendarWidget()
+            : const AnnualCalendarWidget(),
+      ),
     );
   }
 }
@@ -43,7 +51,6 @@ class CalendarScreenAppBarWidget extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-    final scrollController = model?.scrollController;
     return AppBar(
       toolbarHeight: 52,
       leading: IconButton(
@@ -53,7 +60,10 @@ class CalendarScreenAppBarWidget extends StatelessWidget
         onPressed: () {
           Navigator.of(context).pop(context);
         },
-        icon: const Icon(AppIcons.union, size: 18,),
+        icon: const Icon(
+          AppIcons.union,
+          size: 18,
+        ),
       ),
       actions: [
         Padding(
@@ -64,10 +74,15 @@ class CalendarScreenAppBarWidget extends StatelessWidget
                   WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
             ),
             onPressed: () {
-              scrollController?.animateTo(scrollController.initialScrollOffset,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.linear);
-              model?.selectDay(model.today);
+              if (!model!.isMonthlyFormat) {
+                model.changeCalendarFormat();
+              } else {
+                if(model.todayMonthGlobalKey.currentContext != null) {
+                  Scrollable.ensureVisible(model.todayMonthGlobalKey.currentContext!,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.easeInOut);
+                }
+              }
             },
             child: Text(
               'Сегодня',
@@ -86,191 +101,4 @@ class CalendarScreenAppBarWidget extends StatelessWidget
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class CalendarWidget extends StatelessWidget {
-  const CalendarWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                  CalendarScreenWidgetModel.russianDaysOfWeek.length, (index) {
-                return Expanded(
-                  child: Text(
-                    CalendarScreenWidgetModel.russianDaysOfWeek[index],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.nunito().fontFamily,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: AppColors.grey2,
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-          const ScrollCalendarWidget(),
-        ],
-      ),
-    );
-  }
-}
-
-class ScrollCalendarWidget extends StatelessWidget {
-  const ScrollCalendarWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-    return Expanded(
-      child: ListView.builder(
-        controller: model?.scrollController,
-        itemBuilder: (BuildContext context, int index) {
-          var monthDate =
-              DateTime(CalendarScreenWidgetModel.startingYear, index + 1, 1);
-          return CalendarMonthWidget(
-            monthDate: monthDate,
-          );
-        },
-      ),
-    );
-  }
-}
-
-class CalendarMonthWidget extends StatelessWidget {
-  const CalendarMonthWidget({super.key, required this.monthDate});
-
-  final DateTime monthDate;
-
-  @override
-  Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            DateFormat('yyyy').format(monthDate),
-            style: TextStyle(
-              fontFamily: GoogleFonts.nunito().fontFamily,
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-              color: AppColors.grey2,
-            ),
-          ),
-          Text(
-            DateFormat('MMMM').format(monthDate),
-            style: TextStyle(
-              fontFamily: GoogleFonts.nunito().fontFamily,
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-              color: AppColors.black,
-            ),
-          ),
-          const SizedBox(height: 10),
-          CellBuilderWidget(
-            cells: model!.generateMonthCells(monthDate),
-            month: monthDate.month,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CellBuilderWidget extends StatelessWidget {
-  const CellBuilderWidget(
-      {super.key, required this.cells, required this.month});
-
-  final List<DateTime> cells;
-  final int month;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
-          mainAxisSpacing: 0,
-          crossAxisSpacing: 8,
-        ),
-        itemCount: cells.length,
-        itemBuilder: (context, index) {
-          var item = cells[index];
-          var isSameMonth = item.month == month;
-          if (!isSameMonth) {
-            return Container();
-          }
-          return CellWidget(
-            date: item,
-          );
-        });
-  }
-}
-
-class CellWidget extends StatelessWidget {
-  const CellWidget({super.key, required this.date});
-
-  final DateTime date;
-
-  @override
-  Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
-    final bool isToday = model?.today.compareTo(date) == 0;
-
-    return GestureDetector(
-      onTap: () {
-        model?.selectDay(date);
-      },
-      child: Stack(
-        children: <Widget>[
-          if (isToday)
-            Positioned(
-              top: 35,
-              left: 21,
-              child: Container(
-                width: 5,
-                height: 5,
-                decoration: const BoxDecoration(
-                  color: AppColors.mandarin,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          Center(
-            child: Text(
-              date.day.toString(),
-              style: TextStyle(
-                fontFamily: GoogleFonts.nunito().fontFamily,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: AppColors.black,
-              ),
-            ),
-          ),
-          if (model?.selectedDate.compareTo(date) == 0)
-            Container(
-              margin: const EdgeInsets.all(1.5),
-              decoration: const BoxDecoration(
-                color: AppColors.mandarinTransparent,
-                shape: BoxShape.circle,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
 }

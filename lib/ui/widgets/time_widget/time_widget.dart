@@ -20,7 +20,7 @@ class TimeWidget extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '${model?.day} ${model?.russianMonth[model.monthIndex]} ${model?.time}',
+              '${model?.day} ${TimeWidgetModel.russianMonthsInGenitiveCase[model?.monthIndex]} ${model?.time}',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headlineLarge,
             ),

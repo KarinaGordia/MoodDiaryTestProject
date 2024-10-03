@@ -5,7 +5,7 @@ import 'package:mood_diary/ui/widgets/calendar_screen/calendar_screen_widget.dar
 class TimeWidgetModel extends ChangeNotifier {
   var day = DateTime.now().day;
   var monthIndex = DateTime.now().month;
-  final russianMonth = <int, String>{
+  static const russianMonthsInGenitiveCase = <int, String>{
     1:'января',
     2:'февраля',
     3:'марта',
