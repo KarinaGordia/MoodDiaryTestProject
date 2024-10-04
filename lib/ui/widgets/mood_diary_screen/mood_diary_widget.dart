@@ -74,21 +74,26 @@ class SaveButton extends StatelessWidget {
   }
 }
 
-class NotesWidget extends StatelessWidget {
+class NotesWidget extends StatefulWidget {
   const NotesWidget({super.key, required this.title});
 
   final String title;
 
   @override
+  State<NotesWidget> createState() => _NotesWidgetState();
+}
+
+class _NotesWidgetState extends State<NotesWidget> {
+  @override
   Widget build(BuildContext context) {
-    final model = MoodDiaryWidgetModelProvider.read(context)?.model;
+    final model = MoodDiaryWidgetModelProvider.watch(context)?.model;
 
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 10, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: Theme.of(context).textTheme.labelLarge),
+          Text(widget.title, style: Theme.of(context).textTheme.labelLarge),
           Container(
             height: 90,
             padding: const EdgeInsets.all(10),
@@ -105,17 +110,21 @@ class NotesWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(13),
             ),
             child: TextField(
-                minLines: null,
-                maxLines: null,
-                expands: true,
-                style: Theme.of(context).textTheme.labelMedium,
-                cursorColor: AppColors.black,
-                decoration: InputDecoration.collapsed(
-                    hintText: 'Введите заметку',
-                    hintStyle: Theme.of(context).textTheme.headlineMedium),
-                onChanged: (value) {
-                  model?.noteText = value;
-                }),
+              controller: model?.textFieldController,
+              minLines: null,
+              maxLines: null,
+              expands: true,
+              style: Theme.of(context).textTheme.labelMedium,
+              cursorColor: AppColors.black,
+              decoration: InputDecoration.collapsed(
+                  hintText: 'Введите заметку',
+                  hintStyle: Theme.of(context).textTheme.headlineMedium),
+              autofocus: false,
+              onChanged: (value) {
+                model?.noteText = value;
+              },
+              textInputAction: TextInputAction.done,
+            ),
           ),
         ],
       ),
@@ -203,12 +212,10 @@ class SubFeelingWidget extends StatefulWidget {
 }
 
 class _SubFeelingWidgetState extends State<SubFeelingWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     final model = MoodDiaryWidgetModelProvider.read(context)?.model;
-    bool isSelected =  model!.selectedSubFeelings.contains(widget.subFeeling);
+    bool isSelected = model!.selectedSubFeelings.contains(widget.subFeeling);
     return FilterChip(
       visualDensity: const VisualDensity(
         vertical: -2,
@@ -218,9 +225,7 @@ class _SubFeelingWidgetState extends State<SubFeelingWidget> {
         fontFamily: GoogleFonts.nunito().fontFamily,
         fontWeight: FontWeight.w400,
         fontSize: 11,
-        color: isSelected
-            ? AppColors.white
-            : AppColors.black,
+        color: isSelected ? AppColors.white : AppColors.black,
       ),
       selected: isSelected,
       onSelected: (bool value) {

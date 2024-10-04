@@ -24,6 +24,17 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
 
   String _noteText = '';
 
+  set noteText(String value) {
+    final isTaskTextEmpty = _noteText.trim().isEmpty;
+    _noteText = value;
+
+    if(value.trim().isEmpty != isTaskTextEmpty) {
+      notifyListeners();
+    }
+  }
+
+  final textFieldController = TextEditingController();
+
   void resetSelection() {
     for(var feeling in _feelings) {
       feeling.isSelected = false;
@@ -35,6 +46,9 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
 
     sliderCurrentValue = 0.5;
 
+    textFieldController.clear();
+    _noteText = '';
+
     notifyListeners();
   }
 
@@ -44,15 +58,6 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
     bool isNoteAdded = _noteText.trim().isNotEmpty;
 
     return isFeelingSelected && isSubFeelingSelected && isNoteAdded;
-  }
-
-  set noteText(String value) {
-    final isTaskTextEmpty = _noteText.trim().isEmpty;
-    _noteText = value;
-
-    if(value.trim().isEmpty != isTaskTextEmpty) {
-      notifyListeners();
-    }
   }
 
   void selectFeeling(Feeling feeling) {
