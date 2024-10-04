@@ -9,30 +9,20 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
   }
 
   final _feelings = <Feeling>[];
-
   List<Feeling> get feelings => _feelings.toList();
 
   final List<Feeling> _selectedFeelings = [];
-
   List<Feeling> get selectedFeelings => _selectedFeelings.toList();
 
   final List<String> _selectedSubFeelings = [];
-
   List<String> get selectedSubFeelings => _selectedSubFeelings.toList();
 
   final List<String> _displayedSubFeelings = [];
-
   List<String> get subFeelings => _displayedSubFeelings.toList();
 
+  double sliderCurrentValue = 0.5;
+
   String _noteText = '';
-
-  bool isDiaryFilled() {
-    bool isFeelingSelected = _selectedFeelings.isNotEmpty;
-    bool isSubFeelingSelected = _selectedSubFeelings.isNotEmpty;
-    bool isNoteAdded = _noteText.trim().isNotEmpty;
-
-    return isFeelingSelected && isSubFeelingSelected && isNoteAdded;
-  }
 
   set noteText(String value) {
     final isTaskTextEmpty = _noteText.trim().isEmpty;
@@ -41,6 +31,33 @@ class MoodDiaryWidgetModel extends ChangeNotifier {
     if(value.trim().isEmpty != isTaskTextEmpty) {
       notifyListeners();
     }
+  }
+
+  final textFieldController = TextEditingController();
+
+  void resetSelection() {
+    for(var feeling in _feelings) {
+      feeling.isSelected = false;
+    }
+
+    _selectedFeelings.clear();
+    _selectedSubFeelings.clear();
+    _displayedSubFeelings.clear();
+
+    sliderCurrentValue = 0.5;
+
+    textFieldController.clear();
+    _noteText = '';
+
+    notifyListeners();
+  }
+
+  bool isDiaryFilled() {
+    bool isFeelingSelected = _selectedFeelings.isNotEmpty;
+    bool isSubFeelingSelected = _selectedSubFeelings.isNotEmpty;
+    bool isNoteAdded = _noteText.trim().isNotEmpty;
+
+    return isFeelingSelected && isSubFeelingSelected && isNoteAdded;
   }
 
   void selectFeeling(Feeling feeling) {

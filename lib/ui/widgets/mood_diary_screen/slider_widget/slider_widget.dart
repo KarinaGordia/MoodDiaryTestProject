@@ -21,7 +21,7 @@ class EmotionSlider extends StatefulWidget {
 }
 
 class _EmotionSliderState extends State<EmotionSlider> {
-  double _currentValue = 0.5;
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +78,14 @@ class _EmotionSliderState extends State<EmotionSlider> {
                     disabledThumbColor: AppColors.grey5,
                   ),
                   child: Slider(
-                    value: _currentValue,
+                    value: model!.sliderCurrentValue,
                     activeColor: AppColors.mandarin,
                     inactiveColor: AppColors.grey5,
                     max: 1,
                     allowedInteraction: SliderInteraction.tapAndSlide,
                     onChanged: isFeelingSelected! ? (value) {
                       setState(() {
-                        _currentValue = value;
+                        model.sliderCurrentValue = value;
                       });
                     } : null,
                   ),
