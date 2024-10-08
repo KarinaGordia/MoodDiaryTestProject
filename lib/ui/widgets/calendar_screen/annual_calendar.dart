@@ -39,7 +39,6 @@ class _AnnualCalendarWidgetState extends State<AnnualCalendarWidget> {
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-    final todayDate = model?.today;
     return CustomScrollView(
       scrollDirection: Axis.vertical,
       anchor: 0,
@@ -47,18 +46,18 @@ class _AnnualCalendarWidgetState extends State<AnnualCalendarWidget> {
       slivers: <Widget>[
         _getList(
           false,
-          todayDate!.year,
+          model!.selectedYear!,
         ),
         SliverToBoxAdapter(
           key: _center,
           child: YearWidget(
-            year: model!.selectedYear,
+            year: model.selectedYear,
             monthDescription: monthDescription,
           ),
         ),
         _getList(
           true,
-          todayDate.year,
+          model.selectedYear!,
         ),
       ],
     );

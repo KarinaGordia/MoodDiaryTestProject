@@ -6,11 +6,21 @@ import 'package:mood_diary/ui/widgets/calendar_screen/annual_calendar.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/calendar_screen_widget_model.dart';
 import 'package:mood_diary/ui/widgets/calendar_screen/monthly_calendar.dart';
 
-class CalendarScreenWidget extends StatelessWidget {
-  CalendarScreenWidget({super.key});
+class CalendarScreenWidget extends StatefulWidget {
+  const CalendarScreenWidget({super.key});
 
+  @override
+  State<CalendarScreenWidget> createState() => _CalendarScreenWidgetState();
+}
+
+class _CalendarScreenWidgetState extends State<CalendarScreenWidget> {
   final _model = CalendarScreenWidgetModel();
 
+  @override
+  void dispose() {
+    _model.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return CalendarScreenWidgetModelProvider(
@@ -77,11 +87,13 @@ class CalendarScreenAppBarWidget extends StatelessWidget
               if (!model!.isMonthlyFormat) {
                 model.changeCalendarFormat();
               } else {
-                if(model.todayMonthGlobalKey.currentContext != null) {
-                  Scrollable.ensureVisible(model.todayMonthGlobalKey.currentContext!,
-                      duration: const Duration(milliseconds: 1000),
-                      curve: Curves.easeInOut);
-                }
+                double? offset;
+                offset = model.calculateOffsetBetweenMonths(model.selectedMonthDate!);
+                model.monthController.animateTo(
+                  offset,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                );
               }
             },
             child: Text(

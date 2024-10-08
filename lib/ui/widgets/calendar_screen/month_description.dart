@@ -26,6 +26,8 @@ class MonthlyCalendarMonthDescription implements MonthDescription {
 
   @override
   EdgeInsetsGeometry monthWidgetPadding = const EdgeInsets.only(bottom: 16);
+
+
 }
 
 class AnnualCalendarMonthDescription implements MonthDescription {
@@ -45,4 +47,6 @@ class AnnualCalendarMonthDescription implements MonthDescription {
 
   @override
   EdgeInsetsGeometry monthWidgetPadding = EdgeInsets.zero;
+
+
 }

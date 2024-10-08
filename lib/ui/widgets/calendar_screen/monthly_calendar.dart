@@ -49,10 +49,8 @@ class ScrollCalendarWidget extends StatefulWidget {
 class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
   final UniqueKey _initialMonth = UniqueKey();
   final monthDescription = MonthlyCalendarMonthDescription();
-  late final ScrollController _scrollController;
 
   Widget _getList(bool isForward, DateTime date) {
-    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
         return SliverList.builder(
       itemBuilder: (BuildContext context, int index) {
         final Widget child;
@@ -62,10 +60,9 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
         if (index == 0) {
           child = const SizedBox.shrink();
         } else {
-          bool isToday = monthDate.compareTo(DateTime(model!.today.year, model.today.month)) == 0;
           child = MonthWidget(
-            key: isToday ? model.todayMonthGlobalKey : null,
             monthDate: monthDate,
+
             description: monthDescription,
           );
         }
@@ -74,42 +71,53 @@ class _ScrollCalendarWidgetState extends State<ScrollCalendarWidget> {
     );
   }
 
-  @override
-  void initState() {
-    _scrollController = ScrollController();
-    super.initState();
+  void _getFixedHeight() {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+    if(model?.yearTextKey.currentContext != null) {
+      final RenderBox yearTextRenderBox = model?.yearTextKey.currentContext
+          ?.findRenderObject() as RenderBox;
+      final RenderBox monthTextRenderBox = model?.monthTextKey.currentContext
+          ?.findRenderObject() as RenderBox;
+      final RenderBox dayCellRenderBox = model?.dayCellKey.currentContext
+          ?.findRenderObject() as RenderBox;
+      model?.yearTextHeight = yearTextRenderBox.size.height;
+      model?.monthTextHeight = monthTextRenderBox.size.height;
+      model?.dayCellHeight = dayCellRenderBox.size.height;
+    }
   }
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+  void initState() {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+
+    if(model?.yearTextHeight == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) =>  _getFixedHeight());
+    }
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.read(context)?.model;
-    final startDate = model?.selectedMonthDate ?? model?.today;
-    final isToday = model?.isToday(startDate!);
-
+    final selectedDate = model?.selectedMonthDate ?? model?.today;
     return Expanded(
       child: CustomScrollView(
-        cacheExtent: 9999,
-        controller: _scrollController,
+        controller: model?.monthController,
         scrollDirection: Axis.vertical,
         anchor: 0,
         center: _initialMonth,
         slivers: <Widget>[
-          _getList(false, startDate!),
+          _getList(false, selectedDate!),
           SliverToBoxAdapter(
             key: _initialMonth,
             child: MonthWidget(
-              key: isToday! ? model?.todayMonthGlobalKey : null,
-              monthDate: startDate,
+              // key: model.todayMonthGlobalKey,
+              monthDate: selectedDate,
               description: monthDescription,
             ),
           ),
-          _getList(true, startDate),
+          _getList(true, selectedDate),
         ],
       ),
     );

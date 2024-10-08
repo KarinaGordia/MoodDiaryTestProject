@@ -12,6 +12,7 @@ class MonthWidget extends StatelessWidget {
   final DateTime monthDate;
   final MonthDescription description;
 
+
   @override
   Widget build(BuildContext context) {
     final model = CalendarScreenWidgetModelProvider.watch(context)?.model;
@@ -28,10 +29,11 @@ class MonthWidget extends StatelessWidget {
                 model.selectedYear = monthDate.year;
               },
               child: Text(
+                key: model.isCurrentMonth(monthDate) ? model.yearTextKey : null,
                 DateFormat('yyyy').format(monthDate),
                 style: TextStyle(
                   fontFamily: GoogleFonts.nunito().fontFamily,
-                  fontWeight: FontWeight.w700,
+                   fontWeight: FontWeight.w700,
                   fontSize: description.yearFontSize,
                   color: AppColors.grey2,
                 ),
@@ -39,6 +41,7 @@ class MonthWidget extends StatelessWidget {
             ),
           Text(
             CalendarScreenWidgetModel.russianMonthNames[monthDate.month - 1],
+            key: model.isCurrentMonth(monthDate) ? model.monthTextKey : null,
             style: TextStyle(
               fontFamily: GoogleFonts.nunito().fontFamily,
               fontWeight: FontWeight.w700,
@@ -71,6 +74,7 @@ class DayCellBuilderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
     return GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -86,8 +90,11 @@ class DayCellBuilderWidget extends StatelessWidget {
           if (!isSameMonth) {
             return Container();
           }
+
+          bool isToday = model!.isToday(item);
           return DayCellWidget(
             date: item,
+            key: isToday ? model.dayCellKey : null,
             description: description,
           );
         });
