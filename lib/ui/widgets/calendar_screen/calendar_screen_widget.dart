@@ -91,8 +91,8 @@ class CalendarScreenAppBarWidget extends StatelessWidget
                 offset = model.calculateOffsetBetweenMonths(model.selectedMonthDate!);
                 model.monthController.animateTo(
                   offset,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.linear,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
                 );
               }
             },
