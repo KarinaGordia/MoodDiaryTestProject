@@ -33,11 +33,7 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
     'Декабрь',
   ];
 
-  // Map<int, double> monthHeights = {
-  //   4: 0,
-  //   5: 0,
-  //   6: 0,
-  // };
+  Map<int, double> monthHeights = {};
 
   final _today = DateTime.now();
 
@@ -108,8 +104,14 @@ class CalendarScreenWidgetModel extends ChangeNotifier {
   }
 
   double calculateMonthHeight(int weeksInMonth) {
+    final heightFromMap = monthHeights[weeksInMonth];
+    if(monthHeights[weeksInMonth] != null) {
+      return heightFromMap!;
+    }
+
     double fixedHeight = yearTextHeight! + monthTextHeight! + 10 + 16;
     double monthHeight = fixedHeight + (weeksInMonth * dayCellHeight!);
+    monthHeights[weeksInMonth] = monthHeight;
     return monthHeight;
   }
 
