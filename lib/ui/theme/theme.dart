@@ -15,6 +15,7 @@ abstract class AppColors {
 }
 
 final appTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(seedColor: AppColors.mandarin),
   primaryColor: AppColors.mandarin,
   scaffoldBackgroundColor: AppColors.backgroundLight,
   appBarTheme: const AppBarTheme(
