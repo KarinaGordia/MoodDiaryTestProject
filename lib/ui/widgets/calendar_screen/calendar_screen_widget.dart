@@ -60,7 +60,7 @@ class CalendarScreenAppBarWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+
     return AppBar(
       toolbarHeight: 52,
       leading: IconButton(
@@ -75,42 +75,55 @@ class CalendarScreenAppBarWidget extends StatelessWidget
           size: 18,
         ),
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10.0),
-          child: TextButton(
-            style: const ButtonStyle(
-              padding:
-                  WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
-            ),
-            onPressed: () {
-              if (!model!.isMonthlyFormat) {
-                model.changeCalendarFormat();
-              } else {
-                double? offset;
-                offset = model.calculateOffsetBetweenMonths(model.selectedMonthDate!);
-                model.monthController.animateTo(
-                  offset,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                );
-              }
-            },
-            child: Text(
-              'Сегодня',
-              style: TextStyle(
-                fontFamily: GoogleFonts.nunito().fontFamily,
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                color: AppColors.grey2,
-              ),
-            ),
-          ),
-        ),
+      actions: const [
+        AppBarTodayButton(),
       ],
     );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class AppBarTodayButton extends StatelessWidget {
+  const AppBarTodayButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final model = CalendarScreenWidgetModelProvider.read(context)?.model;
+    return Padding(
+      padding: const EdgeInsets.only(right: 10.0),
+      child: TextButton(
+        style: const ButtonStyle(
+          padding:
+              WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
+        ),
+        onPressed: () {
+          if (!model!.isMonthlyFormat) {
+            model.changeCalendarFormat();
+          } else {
+            double? offset;
+            offset = model.calculateOffsetBetweenMonths(model.selectedMonthDate!);
+            model.monthController.animateTo(
+              offset,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            );
+            model.selectDay(model.today);
+          }
+        },
+        child: Text(
+          'Сегодня',
+          style: TextStyle(
+            fontFamily: GoogleFonts.nunito().fontFamily,
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+            color: AppColors.grey2,
+          ),
+        ),
+      ),
+    );
+  }
 }
